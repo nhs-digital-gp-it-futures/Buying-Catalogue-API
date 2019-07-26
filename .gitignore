@@ -328,3 +328,11 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
+
+
+# GPITF
+.env*
+node_modules/
+.DS_Store
+docker-compose.override.yml
+.vscode/
