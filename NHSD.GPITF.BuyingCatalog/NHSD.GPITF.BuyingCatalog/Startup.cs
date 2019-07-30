@@ -189,16 +189,6 @@ namespace NHSD.GPITF.BuyingCatalog
       var exeAssyDir = Path.GetDirectoryName(exeAssyPath);
       var assyPaths = Directory.EnumerateFiles(exeAssyDir, "NHSD.*.dll");
 
-      var useCRM = Settings.USE_CRM(Configuration);
-      if (useCRM)
-      {
-        assyPaths = assyPaths.Where(x => !x.Contains("Database"));
-      }
-      else
-      {
-        assyPaths = assyPaths.Where(x => !x.Contains("CRM"));
-      }
-
       // exclude test assys which are placed here by Docker build
       assyPaths = assyPaths.Where(x => !x.Contains("Test"));
 
@@ -280,21 +270,6 @@ namespace NHSD.GPITF.BuyingCatalog
     private void DumpSettings()
     {
       Console.WriteLine("Settings:");
-      Console.WriteLine($"  CRM:");
-      Console.WriteLine($"    CRM_CLIENTID                      : {Settings.CRM_CLIENTID(Configuration)}");
-      Console.WriteLine($"    CRM_CLIENTSECRET                  : {Settings.CRM_CLIENTSECRET(Configuration)}");
-      Console.WriteLine($"    CRM_CACHE_EXPIRY_MINS             : {Settings.CRM_CACHE_EXPIRY_MINS(Configuration)}");
-      Console.WriteLine($"    CRM_SHORT_TERM_CACHE_EXPIRY_SECS  : {Settings.CRM_SHORT_TERM_CACHE_EXPIRY_SECS(Configuration)}");
-
-      Console.WriteLine($"  GIF:");
-      Console.WriteLine($"    GIF_CRM_URL                 : {Settings.GIF_CRM_URL(Configuration)}");
-      Console.WriteLine($"    GIF_AUTHORITY_URI           : {Settings.GIF_AUTHORITY_URI(Configuration)}");
-      Console.WriteLine($"    GIF_AZURE_CLIENT_ID         : {Settings.GIF_AZURE_CLIENT_ID(Configuration)}");
-      Console.WriteLine($"    GIF_ENCRYPTED_CLIENT_SECRET : {Settings.GIF_ENCRYPTED_CLIENT_SECRET(Configuration)}");
-
-      Console.WriteLine($"  USE_CRM:");
-      Console.WriteLine($"    USE_CRM : {Settings.USE_CRM(Configuration)}");
-
       Console.WriteLine($"  DATASTORE:");
       Console.WriteLine($"    DATASTORE_CONNECTION        : {Settings.DATASTORE_CONNECTION(Configuration)}");
       Console.WriteLine($"    DATASTORE_CONNECTIONTYPE    : {Settings.DATASTORE_CONNECTIONTYPE(Configuration, Settings.DATASTORE_CONNECTION(Configuration))}");
@@ -302,17 +277,12 @@ namespace NHSD.GPITF.BuyingCatalog
 
       Console.WriteLine($"  LOG:");
       Console.WriteLine($"    LOG_CONNECTIONSTRING : {Settings.LOG_CONNECTIONSTRING(Configuration)}");
-      Console.WriteLine($"    LOG_CRM              : {Settings.LOG_CRM(Configuration)}");
-      Console.WriteLine($"    LOG_SHAREPOINT       : {Settings.LOG_SHAREPOINT(Configuration)}");
       Console.WriteLine($"    LOG_BEARERAUTH       : {Settings.LOG_BEARERAUTH(Configuration)}");
 
       Console.WriteLine($"  OIDC:");
       Console.WriteLine($"    OIDC_USERINFO_URL : {Settings.OIDC_USERINFO_URL(Configuration)}");
       Console.WriteLine($"    OIDC_ISSUER_URL   : {Settings.OIDC_ISSUER_URL(Configuration)}");
       Console.WriteLine($"    OIDC_AUDIENCE     : {Settings.OIDC_AUDIENCE(Configuration)}");
-
-      Console.WriteLine($"  CACHE:");
-      Console.WriteLine($"    CACHE_HOST : {Settings.CACHE_HOST(Configuration)}");
     }
   }
 }
