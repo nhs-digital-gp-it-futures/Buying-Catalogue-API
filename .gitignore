@@ -336,5 +336,11 @@ node_modules/
 .DS_Store
 docker-compose.override.yml
 .vscode/
+NHSD.GPITF.BuyingCatalog/NHSD.GPITF.BuyingCatalog/NHSD.GPITF.BuyingCatalog.xml
+NHSD.GPITF.BuyingCatalog/NHSD.GPITF.BuyingCatalog/Logs
+!NHSD.GPITF.BuyingCatalog/NHSD.GPITF.BuyingCatalog/NHSD.GPITF.BuyingCatalog.pfx
+*.sqlite3
+!NHSD.GPITF.BuyingCatalog/NHSD.GPITF.BuyingCatalog.Meta
+NHSD.GPITF.BuyingCatalog/NHSD.GPITF.BuyingCatalog/Properties/launchSettings.json
 .scannerwork
 .sonarqube
