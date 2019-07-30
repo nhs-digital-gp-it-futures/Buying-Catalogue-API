@@ -32,23 +32,6 @@ namespace NHSD.GPITF.BuyingCatalog
     public static bool LOG_SHAREPOINT(IConfiguration config) => bool.Parse(Environment.GetEnvironmentVariable("LOG_SHAREPOINT") ?? config["Log:SharePoint"] ?? false.ToString());
     public static bool LOG_BEARERAUTH(IConfiguration config) => bool.Parse(Environment.GetEnvironmentVariable("LOG_BEARERAUTH") ?? config["Log:BearerAuth"] ?? false.ToString());
 
-    public static string SHAREPOINT_BASEURL(IConfiguration config) => Environment.GetEnvironmentVariable("SHAREPOINT_BASEURL") ?? config["SharePoint:BaseUrl"];
-    public static string SHAREPOINT_ORGANISATIONSRELATIVEURL(IConfiguration config) => Environment.GetEnvironmentVariable("SHAREPOINT_ORGANISATIONSRELATIVEURL") ?? config["SharePoint:OrganisationsRelativeUrl"];
-    public static string SHAREPOINT_CLIENT_ID(IConfiguration config) => Environment.GetEnvironmentVariable("SHAREPOINT_CLIENT_ID") ?? config["SharePoint:ClientId"];
-    public static string SHAREPOINT_CLIENT_SECRET(IConfiguration config) => Environment.GetEnvironmentVariable("SHAREPOINT_CLIENT_SECRET") ?? config["SharePoint:ClientSecret"];
-    public static string SHAREPOINT_PROVIDER_ENV(IConfiguration config) => Environment.GetEnvironmentVariable("SHAREPOINT_PROVIDER_ENV");
-    public static bool SHAREPOINT_PROVIDER_FAKE(IConfiguration config) => SHAREPOINT_PROVIDER_ENV(config) == "test";
-    public static string SHAREPOINT_FILE_DOWNLOAD_SERVER_URL(IConfiguration config) => Environment.GetEnvironmentVariable("SHAREPOINT_FILE_DOWNLOAD_SERVER_URL") ?? config["SharePoint:FileDownloadServerUrl"] ?? "http://localhost:9000/";
-
     public static string CACHE_HOST(IConfiguration config) => Environment.GetEnvironmentVariable("CACHE_HOST") ?? config["Cache:Host"] ?? "localhost";
-
-    public static bool USE_AMQP(IConfiguration config) => bool.Parse(Environment.GetEnvironmentVariable("USE_AMQP") ?? config["AMQP:UseAMQP"] ?? false.ToString());
-    public static bool USE_AZURE_SERVICE_BUS(IConfiguration config) => bool.Parse(Environment.GetEnvironmentVariable("USE_AZURE_SERVICE_BUS") ?? config["AMQP:UseAzureServiceBus"] ?? false.ToString());
-    public static string AMQP_PROTOCOL(IConfiguration config) => Environment.GetEnvironmentVariable("AMQP_PROTOCOL") ?? config["AMQP:Protocol"] ?? "amqp";
-    public static string AMQP_POLICY_NAME(IConfiguration config) => Environment.GetEnvironmentVariable("AMQP_POLICY_NAME") ?? config["AMQP:PolicyName"] ?? "admin";
-    public static string AMQP_POLICY_KEY(IConfiguration config) => Environment.GetEnvironmentVariable("AMQP_POLICY_KEY") ?? config["AMQP:PolicyKey"] ?? "admin";
-    public static string AMQP_NAMESPACE_URL(IConfiguration config) => Environment.GetEnvironmentVariable("AMQP_NAMESPACE_URL") ?? config["AMQP:NamespaceUrl"] ?? "localhost:5672";
-    public static string AMQP_TOPIC_PREFIX(IConfiguration config) => Environment.GetEnvironmentVariable("AMQP_TOPIC_PREFIX") ?? config["AMQP:TopicPrefix"] ?? "topic://";
-    public static uint AMQP_TTL_MINS(IConfiguration config) => uint.Parse(Environment.GetEnvironmentVariable("AMQP_TTL_MINS") ?? config["AMQP:TtlMins"] ?? (7*24*60).ToString(CultureInfo.InvariantCulture));
   }
 }
