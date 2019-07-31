@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using NHSD.GPITF.BuyingCatalog.Attributes;
-using NHSD.GPITF.BuyingCatalog.Examples;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using Swashbuckle.AspNetCore.Examples;
@@ -109,7 +108,6 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [ValidateModelState]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(IEnumerable<Standards>), description: "Success")]
     [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Standards not found in CRM")]
-    [SwaggerRequestExample(typeof(IEnumerable<string>), typeof(StandardIdsExample), jsonConverter: typeof(StringEnumConverter))]
     public IActionResult ByIds([FromBody][Required]IEnumerable<string> ids)
     {
       var stds = _logic.ByIds(ids);
