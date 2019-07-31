@@ -32,7 +32,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
     private Mock<IHttpContextAccessor> _context;
     private Mock<ISolutionsExValidator> _validator;
     private Mock<ISolutionsExFilter> _filter;
-    private Mock<IEvidenceBlobStoreLogic> _evidenceBlobStoreLogic;
 
     [SetUp]
     public void SetUp()
@@ -53,7 +52,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
       _context = new Mock<IHttpContextAccessor>();
       _validator = new Mock<ISolutionsExValidator>();
       _filter = new Mock<ISolutionsExFilter>();
-      _evidenceBlobStoreLogic = new Mock<IEvidenceBlobStoreLogic>();
     }
 
     [Test]
@@ -68,7 +66,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
         _capabilitiesImplementedReviewsModifier.Object,
         _standardsApplicableReviewsModifier.Object,
         _datastore.Object, _context.Object, _validator.Object, _filter.Object,
-        _contacts.Object, _evidenceBlobStoreLogic.Object));
+        _contacts.Object));
     }
 
     [Test]
@@ -83,7 +81,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
         _capabilitiesImplementedReviewsModifier.Object,
         _standardsApplicableReviewsModifier.Object,
         _datastore.Object, _context.Object, _validator.Object, _filter.Object,
-        _contacts.Object, _evidenceBlobStoreLogic.Object);
+        _contacts.Object);
       var solnEx = Creator.GetSolutionEx();
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
       _contacts.Setup(x => x.ByEmail(It.IsAny<string>())).Returns(Creator.GetContact());
@@ -98,64 +96,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
         It.Is<string>(rs => rs == nameof(ISolutionsExLogic.Update))), Times.Once());
     }
 
-    [TestCase(SolutionStatus.Registered)]
-    public void Update_CallsPrepareForSolution_WhenRegistered(SolutionStatus status)
-    {
-      var logic = new SolutionsExLogic(
-        _solutionsModifier.Object,
-        _capabilitiesImplementedModifier.Object,
-        _standardsApplicableModifier.Object,
-        _capabilitiesImplementedEvidenceModifier.Object,
-        _standardsApplicableEvidenceModifier.Object,
-        _capabilitiesImplementedReviewsModifier.Object,
-        _standardsApplicableReviewsModifier.Object,
-        _datastore.Object, _context.Object, _validator.Object, _filter.Object,
-        _contacts.Object, _evidenceBlobStoreLogic.Object);
-      var soln = Creator.GetSolution(status: status);
-      var solnEx = Creator.GetSolutionEx(soln: soln);
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
-      _contacts.Setup(x => x.ByEmail(It.IsAny<string>())).Returns(Creator.GetContact());
-
-      var valres = new ValidationResult();
-      _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
-
-      logic.Update(solnEx);
-
-      _evidenceBlobStoreLogic.Verify(x => x.PrepareForSolution(soln.Id), Times.Once);
-    }
-
-    [TestCase(SolutionStatus.Failed)]
-    [TestCase(SolutionStatus.Draft)]
-    [TestCase(SolutionStatus.CapabilitiesAssessment)]
-    [TestCase(SolutionStatus.StandardsCompliance)]
-    [TestCase(SolutionStatus.FinalApproval)]
-    [TestCase(SolutionStatus.SolutionPage)]
-    [TestCase(SolutionStatus.Approved)]
-    public void Update_DoesNotCallPrepareForSolution_WhenNotRegistered(SolutionStatus status)
-    {
-      var logic = new SolutionsExLogic(
-        _solutionsModifier.Object,
-        _capabilitiesImplementedModifier.Object,
-        _standardsApplicableModifier.Object,
-        _capabilitiesImplementedEvidenceModifier.Object,
-        _standardsApplicableEvidenceModifier.Object,
-        _capabilitiesImplementedReviewsModifier.Object,
-        _standardsApplicableReviewsModifier.Object,
-        _datastore.Object, _context.Object, _validator.Object, _filter.Object,
-        _contacts.Object, _evidenceBlobStoreLogic.Object);
-      var soln = Creator.GetSolution(status: status);
-      var solnEx = Creator.GetSolutionEx(soln: soln);
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
-      _contacts.Setup(x => x.ByEmail(It.IsAny<string>())).Returns(Creator.GetContact());
-
-      var valres = new ValidationResult();
-      _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
-
-      logic.Update(solnEx);
-
-      _evidenceBlobStoreLogic.Verify(x => x.PrepareForSolution(soln.Id), Times.Never);
-    }
-
     [Test]
     public void Update_Calls_SolutionModifier()
     {
@@ -168,7 +108,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
         _capabilitiesImplementedReviewsModifier.Object,
         _standardsApplicableReviewsModifier.Object,
         _datastore.Object, _context.Object, _validator.Object, _filter.Object,
-        _contacts.Object, _evidenceBlobStoreLogic.Object);
+        _contacts.Object);
       var soln = Creator.GetSolution();
       var solnEx = Creator.GetSolutionEx(soln: soln);
 
@@ -192,7 +132,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
         _capabilitiesImplementedReviewsModifier.Object,
         _standardsApplicableReviewsModifier.Object,
         _datastore.Object, _context.Object, _validator.Object, _filter.Object,
-        _contacts.Object, _evidenceBlobStoreLogic.Object);
+        _contacts.Object);
       var claim = Creator.GetCapabilitiesImplemented();
       var soln = Creator.GetSolution();
       var solnEx = Creator.GetSolutionEx(soln: soln, claimedCap: new List<CapabilitiesImplemented>(new[] { claim }));
@@ -217,7 +157,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
         _capabilitiesImplementedReviewsModifier.Object,
         _standardsApplicableReviewsModifier.Object,
         _datastore.Object, _context.Object, _validator.Object, _filter.Object,
-        _contacts.Object, _evidenceBlobStoreLogic.Object);
+        _contacts.Object);
       var claim = Creator.GetStandardsApplicable();
       var soln = Creator.GetSolution();
       var solnEx = Creator.GetSolutionEx(soln: soln, claimedStd: new List<StandardsApplicable>(new[] { claim }));
@@ -242,7 +182,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
         _capabilitiesImplementedReviewsModifier.Object,
         _standardsApplicableReviewsModifier.Object,
         _datastore.Object, _context.Object, _validator.Object, _filter.Object,
-        _contacts.Object, _evidenceBlobStoreLogic.Object);
+        _contacts.Object);
       var evidence = Creator.GetCapabilitiesImplementedEvidence();
       var soln = Creator.GetSolution();
       var solnEx = Creator.GetSolutionEx(soln: soln, claimedCapEv: new List<CapabilitiesImplementedEvidence>(new[] { evidence }));
@@ -267,7 +207,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
         _capabilitiesImplementedReviewsModifier.Object,
         _standardsApplicableReviewsModifier.Object,
         _datastore.Object, _context.Object, _validator.Object, _filter.Object,
-        _contacts.Object, _evidenceBlobStoreLogic.Object);
+        _contacts.Object);
       var evidence = Creator.GetStandardsApplicableEvidence();
       var soln = Creator.GetSolution();
       var solnEx = Creator.GetSolutionEx(soln: soln, claimedStdEv: new List<StandardsApplicableEvidence>(new[] { evidence }));
@@ -292,7 +232,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
         _capabilitiesImplementedReviewsModifier.Object,
         _standardsApplicableReviewsModifier.Object,
         _datastore.Object, _context.Object, _validator.Object, _filter.Object,
-        _contacts.Object, _evidenceBlobStoreLogic.Object);
+        _contacts.Object);
       var review = Creator.GetCapabilitiesImplementedReviews();
       var soln = Creator.GetSolution();
       var solnEx = Creator.GetSolutionEx(soln: soln, claimedCapRev: new List<CapabilitiesImplementedReviews>(new[] { review }));
@@ -317,7 +257,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
         _capabilitiesImplementedReviewsModifier.Object,
         _standardsApplicableReviewsModifier.Object,
         _datastore.Object, _context.Object, _validator.Object, _filter.Object,
-        _contacts.Object, _evidenceBlobStoreLogic.Object);
+        _contacts.Object);
       var review = Creator.GetStandardsApplicableReviews();
       var soln = Creator.GetSolution();
       var solnEx = Creator.GetSolutionEx(soln: soln, claimedStdRev: new List<StandardsApplicableReviews>(new[] { review }));

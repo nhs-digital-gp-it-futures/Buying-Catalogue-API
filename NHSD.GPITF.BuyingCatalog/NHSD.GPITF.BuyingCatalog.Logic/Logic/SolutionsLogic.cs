@@ -13,7 +13,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     private readonly IContactsDatastore _contacts;
     private readonly ISolutionsValidator _validator;
     private readonly ISolutionsFilter _filter;
-    private readonly IEvidenceBlobStoreLogic _evidenceBlobStoreLogic;
 
     public SolutionsLogic(
       ISolutionsModifier modifier,
@@ -21,8 +20,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       IContactsDatastore contacts,
       IHttpContextAccessor context,
       ISolutionsValidator validator,
-      ISolutionsFilter filter,
-      IEvidenceBlobStoreLogic evidenceBlobStoreLogic) :
+      ISolutionsFilter filter) :
       base(context)
     {
       _modifier = modifier;
@@ -30,7 +28,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       _contacts = contacts;
       _validator = validator;
       _filter = filter;
-      _evidenceBlobStoreLogic = evidenceBlobStoreLogic;
     }
 
     public IEnumerable<Solutions> ByFramework(string frameworkId)
@@ -64,12 +61,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       _modifier.ForUpdate(solution);
 
       _datastore.Update(solution);
-
-      // create SharePoint folder structure
-      if (solution.Status == SolutionStatus.Registered)
-      {
-        _evidenceBlobStoreLogic.PrepareForSolution(solution.Id);
-      }
     }
 
     public void Delete(Solutions solution)

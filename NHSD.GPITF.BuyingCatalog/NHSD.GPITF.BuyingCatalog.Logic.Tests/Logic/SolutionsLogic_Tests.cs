@@ -21,7 +21,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     private Mock<IHttpContextAccessor> _context;
     private Mock<ISolutionsValidator> _validator;
     private Mock<ISolutionsFilter> _filter;
-    private Mock<IEvidenceBlobStoreLogic> _evidenceBlobStoreLogic;
 
     [SetUp]
     public void SetUp()
@@ -32,7 +31,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       _context = new Mock<IHttpContextAccessor>();
       _validator = new Mock<ISolutionsValidator>();
       _filter = new Mock<ISolutionsFilter>();
-      _evidenceBlobStoreLogic = new Mock<IEvidenceBlobStoreLogic>();
     }
 
     [Test]
@@ -107,44 +105,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
         It.Is<string>(rs => rs == nameof(ISolutionsLogic.Update))), Times.Once());
     }
 
-    [TestCase(SolutionStatus.Registered)]
-    public void Update_CallsPrepareForSolution_WhenRegistered(SolutionStatus status)
-    {
-      var logic = Create();
-      var soln = Creator.GetSolution(status: status);
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
-      _contacts.Setup(x => x.ByEmail(It.IsAny<string>())).Returns(Creator.GetContact());
-
-      var valres = new ValidationResult();
-      _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
-
-      logic.Update(soln);
-
-      _evidenceBlobStoreLogic.Verify(x => x.PrepareForSolution(soln.Id), Times.Once);
-    }
-
-    [TestCase(SolutionStatus.Failed)]
-    [TestCase(SolutionStatus.Draft)]
-    [TestCase(SolutionStatus.CapabilitiesAssessment)]
-    [TestCase(SolutionStatus.StandardsCompliance)]
-    [TestCase(SolutionStatus.FinalApproval)]
-    [TestCase(SolutionStatus.SolutionPage)]
-    [TestCase(SolutionStatus.Approved)]
-    public void Update_DoesNotCallPrepareForSolution_WhenNotRegistered(SolutionStatus status)
-    {
-      var logic = Create();
-      var soln = Creator.GetSolution(status: status);
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
-      _contacts.Setup(x => x.ByEmail(It.IsAny<string>())).Returns(Creator.GetContact());
-
-      var valres = new ValidationResult();
-      _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
-
-      logic.Update(soln);
-
-      _evidenceBlobStoreLogic.Verify(x => x.PrepareForSolution(soln.Id), Times.Never);
-    }
-
     [Test]
     public void Create_Calls_Modifier()
     {
@@ -185,8 +145,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
         _contacts.Object,
         _context.Object,
         _validator.Object,
-        _filter.Object,
-        _evidenceBlobStoreLogic.Object);
+        _filter.Object);
     }
   }
 }

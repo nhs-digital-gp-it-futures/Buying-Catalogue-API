@@ -25,7 +25,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
     private readonly ISolutionsExValidator _validator;
     private readonly ISolutionsExFilter _filter;
     private readonly IContactsDatastore _contacts;
-    private readonly IEvidenceBlobStoreLogic _evidenceBlobStoreLogic;
 
     public SolutionsExLogic(
       ISolutionsModifier solutionsModifier,
@@ -43,8 +42,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
       IHttpContextAccessor context,
       ISolutionsExValidator validator,
       ISolutionsExFilter filter,
-      IContactsDatastore contacts,
-      IEvidenceBlobStoreLogic evidenceBlobStoreLogic) :
+      IContactsDatastore contacts) :
       base(context)
     {
       _solutionsModifier = solutionsModifier;
@@ -62,7 +60,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
       _validator = validator;
       _filter = filter;
       _contacts = contacts;
-      _evidenceBlobStoreLogic = evidenceBlobStoreLogic;
     }
 
     public SolutionEx BySolution(string solutionId)
@@ -86,12 +83,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
       solnEx.ClaimedStandardReview.ForEach(review =>_standardsApplicableReviewsModifier.ForUpdate(review));
 
       _datastore.Update(solnEx);
-
-      // create SharePoint folder structure
-      if (solnEx.Solution.Status == SolutionStatus.Registered)
-      {
-        _evidenceBlobStoreLogic.PrepareForSolution(solnEx.Solution.Id);
-      }
     }
 
     public IEnumerable<SolutionEx> ByOrganisation(string organisationId)
