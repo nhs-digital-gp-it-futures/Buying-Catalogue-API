@@ -50,8 +50,24 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       var ctx = Creator.GetContext(orgId: suppOrgId, role: Roles.Buyer);
       _context.Setup(c => c.HttpContext).Returns(ctx);
       var orgFilt = new OrganisationsFilter(_context.Object);
-      var govOrg = Creator.GetOrganisation(id:Guid.NewGuid().ToString(), primaryRoleId: PrimaryRole.GovernmentDepartment);
-      var supp1Org = Creator.GetOrganisation(id:suppOrgId, primaryRoleId: PrimaryRole.ApplicationServiceProvider);
+      var govOrg = Creator.GetOrganisation(id: Guid.NewGuid().ToString(), primaryRoleId: PrimaryRole.GovernmentDepartment);
+      var supp1Org = Creator.GetOrganisation(id: suppOrgId, primaryRoleId: PrimaryRole.ApplicationServiceProvider);
+      var supp2Org = Creator.GetOrganisation(id: Guid.NewGuid().ToString(), primaryRoleId: PrimaryRole.ApplicationServiceProvider);
+      var orgs = new[] { govOrg, supp1Org, supp2Org };
+
+      var filterOrg = orgFilt.Filter(orgs.ToList());
+
+      filterOrg.Should().BeEquivalentTo(orgs);
+    }
+
+    [Test]
+    public void Filter_None_Returns_All()
+    {
+      var ctx = Creator.GetContext(role: "None");
+      _context.Setup(c => c.HttpContext).Returns(ctx);
+      var orgFilt = new OrganisationsFilter(_context.Object);
+      var govOrg = Creator.GetOrganisation(id: Guid.NewGuid().ToString(), primaryRoleId: PrimaryRole.GovernmentDepartment);
+      var supp1Org = Creator.GetOrganisation(id: Guid.NewGuid().ToString(), primaryRoleId: PrimaryRole.ApplicationServiceProvider);
       var supp2Org = Creator.GetOrganisation(id: Guid.NewGuid().ToString(), primaryRoleId: PrimaryRole.ApplicationServiceProvider);
       var orgs = new[] { govOrg, supp1Org, supp2Org };
 
