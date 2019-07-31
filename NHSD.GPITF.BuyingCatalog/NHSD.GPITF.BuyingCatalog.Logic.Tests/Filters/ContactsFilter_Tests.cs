@@ -46,6 +46,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       res.Should().BeEquivalentTo(contacts);
     }
 
+    [Test]
     public void Filter_None_Returns_All()
     {
       var ctx = Creator.GetContext(role: "None");
