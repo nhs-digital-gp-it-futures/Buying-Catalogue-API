@@ -19,26 +19,33 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
     public override Contacts Filter(Contacts input)
     {
-      if (!_context.HasRole(Roles.Supplier))
+      if (_context.HasRole(Roles.Admin) ||
+        _context.HasRole(Roles.Buyer))
       {
         return input;
       }
 
-      // Supplier: only own Contacts+NHSD
-      var orgId = _context.HttpContext.User.Claims
-        .Where(x => x.Type == nameof(Organisations))
-        .Select(x => x.Value)
-        .SingleOrDefault();
-      if (orgId is null)
+      if (_context.HasRole(Roles.Supplier))
       {
-        return null;
+        // Supplier: only own Contacts+NHSD
+        var orgId = _context.HttpContext.User.Claims
+          .Where(x => x.Type == nameof(Organisations))
+          .Select(x => x.Value)
+          .SingleOrDefault();
+        if (orgId is null)
+        {
+          return null;
+        }
+
+        var contactOrg = _organisationDatastore.ByContact(input.Id);
+
+        return (input.OrganisationId == orgId ||
+          contactOrg.PrimaryRoleId == PrimaryRole.GovernmentDepartment)
+          ? input : null;
       }
 
-      var contactOrg = _organisationDatastore.ByContact(input.Id);
-
-      return (input.OrganisationId == orgId ||
-        contactOrg.PrimaryRoleId == PrimaryRole.GovernmentDepartment)
-        ? input : null;
+      // None
+      return input;
     }
   }
 }
