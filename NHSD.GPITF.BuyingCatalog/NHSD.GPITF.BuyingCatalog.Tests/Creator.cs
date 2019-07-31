@@ -136,11 +136,9 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
 
       List<CapabilitiesImplemented> claimedCap = null,
       List<CapabilitiesImplementedEvidence> claimedCapEv = null,
-      List<CapabilitiesImplementedReviews> claimedCapRev = null,
 
       List<StandardsApplicable> claimedStd = null,
       List<StandardsApplicableEvidence> claimedStdEv = null,
-      List<StandardsApplicableReviews> claimedStdRev = null,
 
       List<TechnicalContacts> techCont = null
       )
@@ -155,10 +153,6 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
       {
         GetCapabilitiesImplementedEvidence(claimId: claimedCap.First().Id)
       };
-      claimedCapRev = claimedCapRev ?? new List<CapabilitiesImplementedReviews>
-      {
-        GetCapabilitiesImplementedReviews(evidenceId: claimedCapEv.First().Id)
-      };
 
       claimedStd = claimedStd ?? new List<StandardsApplicable>
       {
@@ -167,10 +161,6 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
       claimedStdEv = claimedStdEv ?? new List<StandardsApplicableEvidence>
       {
         GetStandardsApplicableEvidence(claimId: claimedStd.First().Id)
-      };
-      claimedStdRev = claimedStdRev ?? new List<StandardsApplicableReviews>
-      {
-        GetStandardsApplicableReviews(evidenceId: claimedStdEv.First().Id)
       };
 
       techCont = techCont ?? new List<TechnicalContacts>
@@ -184,11 +174,9 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
 
         ClaimedCapability = claimedCap,
         ClaimedCapabilityEvidence = claimedCapEv,
-        ClaimedCapabilityReview = claimedCapRev,
 
         ClaimedStandard = claimedStd,
         ClaimedStandardEvidence = claimedStdEv,
-        ClaimedStandardReview = claimedStdRev,
 
         TechnicalContact = techCont
       };
@@ -348,69 +336,6 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
         Id = id ?? Guid.NewGuid().ToString(),
         PreviousId = prevId,
         ClaimId = claimId ?? Guid.NewGuid().ToString(),
-        CreatedById = createdById ?? Guid.NewGuid().ToString(),
-        CreatedOn = createdOn ?? DateTime.UtcNow,
-        OriginalDate = originalDate ?? DateTime.UtcNow
-      };
-      Verifier.Verify(retval);
-      return retval;
-    }
-
-    public static DummyReviewsBase GetReviewsBase(
-      string id = null,
-      string prevId = null,
-      string evidenceId = null,
-      string createdById = null,
-      DateTime? createdOn = null,
-      DateTime? originalDate = null)
-    {
-      var retval = new DummyReviewsBase
-      {
-        Id = id ?? Guid.NewGuid().ToString(),
-        PreviousId = prevId,
-        EvidenceId = evidenceId ?? Guid.NewGuid().ToString(),
-        CreatedById = createdById ?? Guid.NewGuid().ToString(),
-        CreatedOn = createdOn ?? DateTime.Now,
-        OriginalDate = originalDate ?? DateTime.UtcNow
-      };
-      Verifier.Verify(retval);
-      return retval;
-    }
-
-    public static CapabilitiesImplementedReviews GetCapabilitiesImplementedReviews(
-      string id = null,
-      string prevId = null,
-      string evidenceId = null,
-      string createdById = null,
-      DateTime? createdOn = null,
-      DateTime? originalDate = null)
-    {
-      var retval = new CapabilitiesImplementedReviews
-      {
-        Id = id ?? Guid.NewGuid().ToString(),
-        PreviousId = prevId,
-        EvidenceId = evidenceId ?? Guid.NewGuid().ToString(),
-        CreatedById = createdById ?? Guid.NewGuid().ToString(),
-        CreatedOn = createdOn ?? DateTime.UtcNow,
-        OriginalDate = originalDate ?? DateTime.UtcNow
-      };
-      Verifier.Verify(retval);
-      return retval;
-    }
-
-    public static StandardsApplicableReviews GetStandardsApplicableReviews(
-      string id = null,
-      string prevId = null,
-      string evidenceId = null,
-      string createdById = null,
-      DateTime? createdOn = null,
-      DateTime? originalDate = null)
-    {
-      var retval = new StandardsApplicableReviews
-      {
-        Id = id ?? Guid.NewGuid().ToString(),
-        PreviousId = prevId,
-        EvidenceId = evidenceId ?? Guid.NewGuid().ToString(),
         CreatedById = createdById ?? Guid.NewGuid().ToString(),
         CreatedOn = createdOn ?? DateTime.UtcNow,
         OriginalDate = originalDate ?? DateTime.UtcNow

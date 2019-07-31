@@ -35,21 +35,15 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
         // internal consistency checks
         ClaimedCapabilityMustBelongToSolution();
         ClaimedCapabilityEvidenceMustBelongToClaim();
-        ClaimedCapabilityReviewMustBelongToEvidence();
 
         ClaimedStandardMustBelongToSolution();
         ClaimedStandardEvidenceMustBelongToClaim();
-        ClaimedStandardReviewMustBelongToEvidence();
 
         TechnicalContactMustBelongToSolution();
 
         // all previous versions in solution
         ClaimedCapabilityEvidencePreviousVersionMustBelongToSolution();
         ClaimedStandardEvidencePreviousVersionMustBelongToSolution();
-
-        ClaimedCapabilityReviewPreviousVersionMustBelongToSolution();
-        ClaimedStandardReviewPreviousVersionMustBelongToSolution();
-
 
         // One Rule to rule them all,
         // One Rule to find them,
@@ -111,28 +105,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
         .WithMessage("ClaimedStandardEvidence must belong to claim");
     }
 
-    public void ClaimedCapabilityReviewMustBelongToEvidence()
-    {
-      RuleFor(x => x)
-        .Must(soln =>
-        {
-          var evidenceIds = soln.ClaimedCapabilityEvidence.Select(cce => cce.Id);
-          return soln.ClaimedCapabilityReview.All(ccr => evidenceIds.Contains(ccr.EvidenceId));
-        })
-        .WithMessage("ClaimedCapabilityReview must belong to evidence");
-    }
-
-    public void ClaimedStandardReviewMustBelongToEvidence()
-    {
-      RuleFor(x => x)
-        .Must(soln =>
-        {
-          var evidenceIds = soln.ClaimedStandardEvidence.Select(cse => cse.Id);
-          return soln.ClaimedStandardReview.All(csr => evidenceIds.Contains(csr.EvidenceId));
-        })
-        .WithMessage("ClaimedStandardReview must belong to evidence");
-    }
-
     public void TechnicalContactMustBelongToSolution()
     {
       RuleFor(x => x)
@@ -165,30 +137,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
           return evidencePrevIds.All(prevId => evidenceIds.Contains(prevId));
         })
         .WithMessage("ClaimedStandardEvidence previous version must belong to solution");
-    }
-
-    public void ClaimedCapabilityReviewPreviousVersionMustBelongToSolution()
-    {
-      RuleFor(x => x)
-        .Must(soln =>
-        {
-          var evidenceIds = soln.ClaimedCapabilityReview.Select(cce => cce.Id);
-          var evidencePrevIds = soln.ClaimedCapabilityReview.Select(cce => cce.PreviousId).Where(id => id != null);
-          return evidencePrevIds.All(prevId => evidenceIds.Contains(prevId));
-        })
-        .WithMessage("ClaimedCapabilityReview previous version must belong to solution");
-    }
-
-    public void ClaimedStandardReviewPreviousVersionMustBelongToSolution()
-    {
-      RuleFor(x => x)
-        .Must(soln =>
-        {
-          var evidenceIds = soln.ClaimedStandardReview.Select(cce => cce.Id);
-          var evidencePrevIds = soln.ClaimedStandardReview.Select(cce => cce.PreviousId).Where(id => id != null);
-          return evidencePrevIds.All(prevId => evidenceIds.Contains(prevId));
-        })
-        .WithMessage("ClaimedStandardReview previous version must belong to solution");
     }
 
     public void CheckUpdateAllowed()
@@ -385,36 +333,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
       }
 
       return same;
-    }
-
-    // cannot change/remove ClaimedCapabilityReview but can add while pending
-    public bool MustBePendingToChangeClaimedCapabilityReview(SolutionEx oldSolnEx, SolutionEx newSolnEx)
-    {
-      return MustBePendingToChangeReview(
-        newSolnEx.Solution.Status,
-        oldSolnEx.ClaimedCapabilityReview,
-        newSolnEx.ClaimedCapabilityReview,
-        new CapabilitiesImplementedReviewsComparer(),
-        () =>
-        {
-          var msg = new { ErrorMessage = nameof(MustBePendingToChangeClaimedCapabilityReview), ExistingValue = oldSolnEx };
-          _logger.LogError(JsonConvert.SerializeObject(msg));
-        });
-    }
-
-    // cannot change/remove ClaimedStandardReview but can add while pending
-    public bool MustBePendingToChangeClaimedStandardReview(SolutionEx oldSolnEx, SolutionEx newSolnEx)
-    {
-      return MustBePendingToChangeReview(
-        newSolnEx.Solution.Status,
-        oldSolnEx.ClaimedStandardReview,
-        newSolnEx.ClaimedStandardReview,
-        new StandardsApplicableReviewsComparer(),
-        () =>
-        {
-          var msg = new { ErrorMessage = nameof(MustBePendingToChangeClaimedStandardReview), ExistingValue = oldSolnEx };
-          _logger.LogError(JsonConvert.SerializeObject(msg));
-        });
     }
 
     // check every ClaimedCapability

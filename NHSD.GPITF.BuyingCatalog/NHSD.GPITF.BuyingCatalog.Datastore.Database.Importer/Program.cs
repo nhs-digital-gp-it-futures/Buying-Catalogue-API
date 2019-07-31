@@ -55,9 +55,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Importer
       yield return typeof(FrameworkStandard);
       yield return typeof(CapabilityStandard);
       yield return typeof(CapabilitiesImplementedEvidence);
-      yield return typeof(CapabilitiesImplementedReviews);
       yield return typeof(StandardsApplicableEvidence);
-      yield return typeof(StandardsApplicableReviews);
     }
 
     private static IEnumerable<string> GetDataFiles()
@@ -78,9 +76,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Importer
       yield return typeof(CapabilitiesImplementedClassMap);
       yield return typeof(StandardsApplicableClassMap);
       yield return typeof(CapabilitiesImplementedEvidenceClassMap);
-      yield return typeof(CapabilitiesImplementedReviewsClassMap);
       yield return typeof(StandardsApplicableEvidenceClassMap);
-      yield return typeof(StandardsApplicableReviewsClassMap);
     }
 
     private readonly string _dataDirectory;
@@ -216,27 +212,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Importer
     }
   }
 
-  public sealed class CapabilitiesImplementedReviewsClassMap : ClassMap<CapabilitiesImplementedReviews>
-  {
-    public CapabilitiesImplementedReviewsClassMap()
-    {
-      AutoMap();
-      Map(m => m.PreviousId).TypeConverterOption.NullValues(string.Empty);
-    }
-  }
-
   public sealed class StandardsApplicableEvidenceClassMap : ClassMap<StandardsApplicableEvidence>
   {
     public StandardsApplicableEvidenceClassMap()
-    {
-      AutoMap();
-      Map(m => m.PreviousId).TypeConverterOption.NullValues(string.Empty);
-    }
-  }
-
-  public sealed class StandardsApplicableReviewsClassMap : ClassMap<StandardsApplicableReviews>
-  {
-    public StandardsApplicableReviewsClassMap()
     {
       AutoMap();
       Map(m => m.PreviousId).TypeConverterOption.NullValues(string.Empty);

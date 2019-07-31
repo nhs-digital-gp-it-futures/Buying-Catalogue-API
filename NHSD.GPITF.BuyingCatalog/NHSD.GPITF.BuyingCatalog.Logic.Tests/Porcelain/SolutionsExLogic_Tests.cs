@@ -24,9 +24,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
     private Mock<ICapabilitiesImplementedEvidenceModifier> _capabilitiesImplementedEvidenceModifier;
     private Mock<IStandardsApplicableEvidenceModifier> _standardsApplicableEvidenceModifier;
 
-    private Mock<ICapabilitiesImplementedReviewsModifier> _capabilitiesImplementedReviewsModifier;
-    private Mock<IStandardsApplicableReviewsModifier> _standardsApplicableReviewsModifier;
-
     private Mock<ISolutionsExDatastore> _datastore;
     private Mock<IContactsDatastore> _contacts;
     private Mock<IHttpContextAccessor> _context;
@@ -44,9 +41,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
       _capabilitiesImplementedEvidenceModifier = new Mock<ICapabilitiesImplementedEvidenceModifier>();
       _standardsApplicableEvidenceModifier = new Mock<IStandardsApplicableEvidenceModifier>();
 
-      _capabilitiesImplementedReviewsModifier = new Mock<ICapabilitiesImplementedReviewsModifier>();
-      _standardsApplicableReviewsModifier = new Mock<IStandardsApplicableReviewsModifier>();
-
       _datastore = new Mock<ISolutionsExDatastore>();
       _contacts = new Mock<IContactsDatastore>();
       _context = new Mock<IHttpContextAccessor>();
@@ -63,8 +57,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
         _standardsApplicableModifier.Object,
         _capabilitiesImplementedEvidenceModifier.Object,
         _standardsApplicableEvidenceModifier.Object,
-        _capabilitiesImplementedReviewsModifier.Object,
-        _standardsApplicableReviewsModifier.Object,
         _datastore.Object, _context.Object, _validator.Object, _filter.Object,
         _contacts.Object));
     }
@@ -78,8 +70,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
         _standardsApplicableModifier.Object,
         _capabilitiesImplementedEvidenceModifier.Object,
         _standardsApplicableEvidenceModifier.Object,
-        _capabilitiesImplementedReviewsModifier.Object,
-        _standardsApplicableReviewsModifier.Object,
         _datastore.Object, _context.Object, _validator.Object, _filter.Object,
         _contacts.Object);
       var solnEx = Creator.GetSolutionEx();
@@ -105,8 +95,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
         _standardsApplicableModifier.Object,
         _capabilitiesImplementedEvidenceModifier.Object,
         _standardsApplicableEvidenceModifier.Object,
-        _capabilitiesImplementedReviewsModifier.Object,
-        _standardsApplicableReviewsModifier.Object,
         _datastore.Object, _context.Object, _validator.Object, _filter.Object,
         _contacts.Object);
       var soln = Creator.GetSolution();
@@ -129,8 +117,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
         _standardsApplicableModifier.Object,
         _capabilitiesImplementedEvidenceModifier.Object,
         _standardsApplicableEvidenceModifier.Object,
-        _capabilitiesImplementedReviewsModifier.Object,
-        _standardsApplicableReviewsModifier.Object,
         _datastore.Object, _context.Object, _validator.Object, _filter.Object,
         _contacts.Object);
       var claim = Creator.GetCapabilitiesImplemented();
@@ -154,8 +140,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
         _standardsApplicableModifier.Object,
         _capabilitiesImplementedEvidenceModifier.Object,
         _standardsApplicableEvidenceModifier.Object,
-        _capabilitiesImplementedReviewsModifier.Object,
-        _standardsApplicableReviewsModifier.Object,
         _datastore.Object, _context.Object, _validator.Object, _filter.Object,
         _contacts.Object);
       var claim = Creator.GetStandardsApplicable();
@@ -179,8 +163,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
         _standardsApplicableModifier.Object,
         _capabilitiesImplementedEvidenceModifier.Object,
         _standardsApplicableEvidenceModifier.Object,
-        _capabilitiesImplementedReviewsModifier.Object,
-        _standardsApplicableReviewsModifier.Object,
         _datastore.Object, _context.Object, _validator.Object, _filter.Object,
         _contacts.Object);
       var evidence = Creator.GetCapabilitiesImplementedEvidence();
@@ -204,8 +186,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
         _standardsApplicableModifier.Object,
         _capabilitiesImplementedEvidenceModifier.Object,
         _standardsApplicableEvidenceModifier.Object,
-        _capabilitiesImplementedReviewsModifier.Object,
-        _standardsApplicableReviewsModifier.Object,
         _datastore.Object, _context.Object, _validator.Object, _filter.Object,
         _contacts.Object);
       var evidence = Creator.GetStandardsApplicableEvidence();
@@ -218,56 +198,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
       logic.Update(solnEx);
 
       _standardsApplicableEvidenceModifier.Verify(x => x.ForUpdate(evidence), Times.Once);
-    }
-
-    [Test]
-    public void Update_Calls_Modifier_For_ClaimedCapabilityReview()
-    {
-      var logic = new SolutionsExLogic(
-        _solutionsModifier.Object,
-        _capabilitiesImplementedModifier.Object,
-        _standardsApplicableModifier.Object,
-        _capabilitiesImplementedEvidenceModifier.Object,
-        _standardsApplicableEvidenceModifier.Object,
-        _capabilitiesImplementedReviewsModifier.Object,
-        _standardsApplicableReviewsModifier.Object,
-        _datastore.Object, _context.Object, _validator.Object, _filter.Object,
-        _contacts.Object);
-      var review = Creator.GetCapabilitiesImplementedReviews();
-      var soln = Creator.GetSolution();
-      var solnEx = Creator.GetSolutionEx(soln: soln, claimedCapRev: new List<CapabilitiesImplementedReviews>(new[] { review }));
-
-      var valres = new ValidationResult();
-      _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
-
-      logic.Update(solnEx);
-
-      _capabilitiesImplementedReviewsModifier.Verify(x => x.ForUpdate(review), Times.Once);
-    }
-
-    [Test]
-    public void Update_Calls_Modifier_For_ClaimedStandardReview()
-    {
-      var logic = new SolutionsExLogic(
-        _solutionsModifier.Object,
-        _capabilitiesImplementedModifier.Object,
-        _standardsApplicableModifier.Object,
-        _capabilitiesImplementedEvidenceModifier.Object,
-        _standardsApplicableEvidenceModifier.Object,
-        _capabilitiesImplementedReviewsModifier.Object,
-        _standardsApplicableReviewsModifier.Object,
-        _datastore.Object, _context.Object, _validator.Object, _filter.Object,
-        _contacts.Object);
-      var review = Creator.GetStandardsApplicableReviews();
-      var soln = Creator.GetSolution();
-      var solnEx = Creator.GetSolutionEx(soln: soln, claimedStdRev: new List<StandardsApplicableReviews>(new[] { review }));
-
-      var valres = new ValidationResult();
-      _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
-
-      logic.Update(solnEx);
-
-      _standardsApplicableReviewsModifier.Verify(x => x.ForUpdate(review), Times.Once);
     }
   }
 }

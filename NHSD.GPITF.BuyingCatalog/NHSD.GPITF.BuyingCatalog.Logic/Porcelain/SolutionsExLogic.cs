@@ -18,9 +18,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
     private readonly ICapabilitiesImplementedEvidenceModifier _capabilitiesImplementedEvidenceModifier;
     private readonly IStandardsApplicableEvidenceModifier _standardsApplicableEvidenceModifier;
 
-    private readonly ICapabilitiesImplementedReviewsModifier _capabilitiesImplementedReviewsModifier;
-    private readonly IStandardsApplicableReviewsModifier _standardsApplicableReviewsModifier;
-
     private readonly ISolutionsExDatastore _datastore;
     private readonly ISolutionsExValidator _validator;
     private readonly ISolutionsExFilter _filter;
@@ -35,9 +32,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
       ICapabilitiesImplementedEvidenceModifier capabilitiesImplementedEvidenceModifier,
       IStandardsApplicableEvidenceModifier standardsApplicableEvidenceModifier,
 
-      ICapabilitiesImplementedReviewsModifier capabilitiesImplementedReviewsModifier,
-      IStandardsApplicableReviewsModifier standardsApplicableReviewsModifier,
-
       ISolutionsExDatastore datastore,
       IHttpContextAccessor context,
       ISolutionsExValidator validator,
@@ -49,9 +43,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
 
       _capabilitiesImplementedModifier = capabilitiesImplementedModifier;
       _standardsApplicableModifier = standardsApplicableModifier;
-
-      _capabilitiesImplementedReviewsModifier = capabilitiesImplementedReviewsModifier;
-      _standardsApplicableReviewsModifier = standardsApplicableReviewsModifier;
 
       _capabilitiesImplementedEvidenceModifier = capabilitiesImplementedEvidenceModifier;
       _standardsApplicableEvidenceModifier = standardsApplicableEvidenceModifier;
@@ -78,9 +69,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
 
       solnEx.ClaimedCapabilityEvidence.ForEach(evidence => _capabilitiesImplementedEvidenceModifier.ForUpdate(evidence));
       solnEx.ClaimedStandardEvidence.ForEach(evidence => _standardsApplicableEvidenceModifier.ForUpdate(evidence));
-
-      solnEx.ClaimedCapabilityReview.ForEach(review =>_capabilitiesImplementedReviewsModifier.ForUpdate(review));
-      solnEx.ClaimedStandardReview.ForEach(review =>_standardsApplicableReviewsModifier.ForUpdate(review));
 
       _datastore.Update(solnEx);
     }

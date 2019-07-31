@@ -16,11 +16,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
 
     private readonly ICapabilitiesImplementedDatastore _claimedCapabilityDatastore;
     private readonly ICapabilitiesImplementedEvidenceDatastore _claimedCapabilityEvidenceDatastore;
-    private readonly ICapabilitiesImplementedReviewsDatastore _claimedCapabilityReviewsDatastore;
 
     private readonly IStandardsApplicableDatastore _claimedStandardDatastore;
     private readonly IStandardsApplicableEvidenceDatastore _claimedStandardEvidenceDatastore;
-    private readonly IStandardsApplicableReviewsDatastore _claimedStandardReviewsDatastore;
 
     public SolutionsExDatastore(
       IDbConnectionFactory dbConnectionFactory,
@@ -31,11 +29,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
 
       ICapabilitiesImplementedDatastore claimedCapabilityDatastore,
       ICapabilitiesImplementedEvidenceDatastore claimedCapabilityEvidenceDatastore,
-      ICapabilitiesImplementedReviewsDatastore claimedCapabilityReviewsDatastore,
 
       IStandardsApplicableDatastore claimedStandardDatastore,
-      IStandardsApplicableEvidenceDatastore claimedStandardEvidenceDatastore,
-      IStandardsApplicableReviewsDatastore claimedStandardReviewsDatastore
+      IStandardsApplicableEvidenceDatastore claimedStandardEvidenceDatastore
       ) :
       base(dbConnectionFactory, logger, policy)
     {
@@ -44,11 +40,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
 
       _claimedCapabilityDatastore = claimedCapabilityDatastore;
       _claimedCapabilityEvidenceDatastore = claimedCapabilityEvidenceDatastore;
-      _claimedCapabilityReviewsDatastore = claimedCapabilityReviewsDatastore;
 
       _claimedStandardDatastore = claimedStandardDatastore;
       _claimedStandardEvidenceDatastore = claimedStandardEvidenceDatastore;
-      _claimedStandardReviewsDatastore = claimedStandardReviewsDatastore;
     }
 
     public SolutionEx BySolution(string solutionId)
@@ -68,16 +62,8 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
           .SelectMany(cc => _claimedCapabilityEvidenceDatastore.ByClaim(cc.Id))
             .SelectMany(x => x)
             .ToList();
-        retval.ClaimedCapabilityReview = retval.ClaimedCapabilityEvidence
-          .SelectMany(cce => _claimedCapabilityReviewsDatastore.ByEvidence(cce.Id))
-            .SelectMany(x => x)
-            .ToList();
         retval.ClaimedStandardEvidence = retval.ClaimedStandard
           .SelectMany(cs => _claimedStandardEvidenceDatastore.ByClaim(cs.Id))
-            .SelectMany(x => x)
-            .ToList();
-        retval.ClaimedStandardReview = retval.ClaimedStandardEvidence
-          .SelectMany(cse => _claimedStandardReviewsDatastore.ByEvidence(cse.Id))
             .SelectMany(x => x)
             .ToList();
 
@@ -106,7 +92,6 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
 
           // re-insert each chain, starting at the root ie PreviousId==null
           GetInsertionTree(solnEx.ClaimedCapabilityEvidence).ForEach(cce => _dbConnection.Insert(cce, trans));
-          GetInsertionTree(solnEx.ClaimedCapabilityReview).ForEach(ccr => _dbConnection.Insert(ccr, trans));
           #endregion
 
           #region ClaimedStandard
@@ -121,7 +106,6 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
 
           // re-insert each chain, starting at the root ie PreviousId==null
           GetInsertionTree(solnEx.ClaimedStandardEvidence).ForEach(cse => _dbConnection.Insert(cse, trans));
-          GetInsertionTree(solnEx.ClaimedStandardReview).ForEach(csr => _dbConnection.Insert(csr, trans));
           #endregion
 
           #region TechnicalContacts
