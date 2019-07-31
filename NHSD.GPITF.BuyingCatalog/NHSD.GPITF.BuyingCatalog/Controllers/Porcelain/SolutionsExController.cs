@@ -2,14 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using NHSD.GPITF.BuyingCatalog.Attributes;
 using NHSD.GPITF.BuyingCatalog.Interfaces.Porcelain;
-using NHSD.GPITF.BuyingCatalog.Models;
 using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
-using ZNetCS.AspNetCore.Authentication.Basic;
 
 namespace NHSD.GPITF.BuyingCatalog.Controllers.Porcelain
 {
@@ -19,9 +16,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers.Porcelain
   [ApiVersion("1")]
   [ApiTag("porcelain")]
   [Route("api/porcelain/[controller]")]
-  [Authorize(
-    Roles = Roles.Admin + "," + Roles.Buyer + "," + Roles.Supplier,
-    AuthenticationSchemes = BasicAuthenticationDefaults.AuthenticationScheme)]
+  [AllowAnonymous]
   [Produces("application/json")]
   public sealed class SolutionsExController : Controller
   {

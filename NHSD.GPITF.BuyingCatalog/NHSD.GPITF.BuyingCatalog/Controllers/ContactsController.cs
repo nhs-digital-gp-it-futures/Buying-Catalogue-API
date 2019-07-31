@@ -8,7 +8,6 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Web;
-using ZNetCS.AspNetCore.Authentication.Basic;
 
 namespace NHSD.GPITF.BuyingCatalog.Controllers
 {
@@ -17,9 +16,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
   /// </summary>
   [ApiVersion("1")]
   [Route("api/[controller]")]
-  [Authorize(
-    Roles = Roles.Admin + "," + Roles.Buyer + "," + Roles.Supplier,
-    AuthenticationSchemes = BasicAuthenticationDefaults.AuthenticationScheme)]
+  [AllowAnonymous]
   [Produces("application/json")]
   public sealed class ContactsController : Controller
   {

@@ -11,8 +11,6 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using NHSD.GPITF.BuyingCatalog.Authentications;
-using NHSD.GPITF.BuyingCatalog.OperationFilters;
 using NLog;
 using Swashbuckle.AspNetCore.Examples;
 using Swashbuckle.AspNetCore.Swagger;
@@ -21,8 +19,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
-using ZNetCS.AspNetCore.Authentication.Basic;
-using ZNetCS.AspNetCore.Authentication.Basic.Events;
 
 namespace NHSD.GPITF.BuyingCatalog
 {
@@ -113,15 +109,6 @@ namespace NHSD.GPITF.BuyingCatalog
               tags.Any(tag => tag.Tag == docName);
           });
 
-          options.AddSecurityDefinition("oauth2", new OAuth2Scheme
-          {
-            Type = "oauth2",
-            Flow = "accessCode"
-          });
-          options.AddSecurityDefinition("basic", new BasicAuthScheme());
-
-          options.OperationFilter<AssignSecurityRequirements>();
-
           // Set the comments path for the Swagger JSON and UI.
           var xmlPath = Path.Combine(AppContext.BaseDirectory, "NHSD.GPITF.BuyingCatalog.xml");
           options.IncludeXmlComments(xmlPath);
@@ -129,22 +116,6 @@ namespace NHSD.GPITF.BuyingCatalog
           options.OperationFilter<ExamplesOperationFilter>();
         });
       }
-
-      services
-        .AddAuthentication(BasicAuthenticationDefaults.AuthenticationScheme)
-        .AddBasicAuthentication(
-          options =>
-          {
-            options.Realm = "NHSD.GPITF.BuyingCatalog";
-            options.Events = new BasicAuthenticationEvents
-            {
-              OnValidatePrincipal = context =>
-              {
-                var auth = ServiceProvider.GetService<IBasicAuthentication>();
-                return auth.Authenticate(context);
-              }
-            };
-          });
 
       // Create the container builder.
       var builder = new ContainerBuilder();
