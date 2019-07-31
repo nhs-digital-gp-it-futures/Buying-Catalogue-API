@@ -50,6 +50,19 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
+    public void Filter_None_ReturnsAll()
+    {
+      var ctx = Creator.GetContext(role: "None");
+      _context.Setup(c => c.HttpContext).Returns(ctx);
+      var filter = new DummyClaimsFilterBase(_context.Object, _solutionDatastore.Object);
+      var claim = Creator.GetClaimsBase();
+
+      var res = filter.Filter(claim);
+
+      res.Should().Be(claim);
+    }
+
+    [Test]
     public void Filter_SupplierOwn_ReturnsOwn()
     {
       var filter = new DummyClaimsFilterBase(_context.Object, _solutionDatastore.Object);
