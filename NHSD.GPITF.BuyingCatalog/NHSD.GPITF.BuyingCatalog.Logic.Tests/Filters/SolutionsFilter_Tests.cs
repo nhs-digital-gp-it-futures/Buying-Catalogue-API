@@ -69,7 +69,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void Filter_None_Returns_NonFailedDraft(
+    public void Filter_None_Returns_Approved(
       [ValueSource(typeof(Creator), nameof(Creator.SolutionStatuses))]SolutionStatus status)
     {
       var ctx = Creator.GetContext(role: "None");
@@ -81,9 +81,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
         Creator.GetSolution(status: status),
         Creator.GetSolution(status: status)
       };
-      var expSolns = solns.Where(x =>
-        x.Status != SolutionStatus.Draft &&
-        x.Status != SolutionStatus.Failed);
+      var expSolns = solns.Where(x => x.Status == SolutionStatus.Approved);
 
       var res = filter.Filter(solns);
 

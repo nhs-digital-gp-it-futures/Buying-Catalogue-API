@@ -30,8 +30,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         return _context.OrganisationId() == input.OrganisationId ? input : null;
       }
 
-      // None: hide draft & failed Solutions
-      return (input.Status == SolutionStatus.Draft || input.Status == SolutionStatus.Failed) ? null : input;
+      // None: only approved Solutions
+      return (input.Status == SolutionStatus.Approved) ? input : null;
     }
   }
 }
