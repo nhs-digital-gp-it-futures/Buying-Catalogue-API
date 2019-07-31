@@ -42,8 +42,4 @@
     <ProjectReference Include="..\NHSD.GPITF.BuyingCatalog\NHSD.GPITF.BuyingCatalog.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Modifiers\" />
-  </ItemGroup>
-
 </Project>

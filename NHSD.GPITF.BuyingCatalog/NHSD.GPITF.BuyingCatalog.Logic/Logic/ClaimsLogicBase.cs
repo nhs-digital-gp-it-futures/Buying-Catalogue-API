@@ -9,18 +9,15 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
   public abstract class ClaimsLogicBase<T> : LogicBase, IClaimsLogic<T> where T : ClaimsBase
   {
     protected readonly IClaimsDatastore<T> _datastore;
-    protected readonly IClaimsValidator<T> _validator;
     protected readonly IClaimsFilter<T> _filter;
 
     protected ClaimsLogicBase(
       IClaimsDatastore<T> datastore,
-      IClaimsValidator<T> validator,
       IClaimsFilter<T> filter,
       IHttpContextAccessor context) :
       base(context)
     {
       _datastore = datastore;
-      _validator = validator;
       _filter = filter;
     }
 

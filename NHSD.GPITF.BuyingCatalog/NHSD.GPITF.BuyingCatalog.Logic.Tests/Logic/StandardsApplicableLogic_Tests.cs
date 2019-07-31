@@ -13,7 +13,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
   {
     private Mock<IHttpContextAccessor> _context;
     private Mock<IStandardsApplicableDatastore> _datastore;
-    private Mock<IStandardsApplicableValidator> _validator;
     private Mock<IStandardsApplicableFilter> _filter;
 
     [SetUp]
@@ -21,14 +20,13 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     {
       _context = new Mock<IHttpContextAccessor>();
       _datastore = new Mock<IStandardsApplicableDatastore>();
-      _validator = new Mock<IStandardsApplicableValidator>();
       _filter    = new Mock<IStandardsApplicableFilter>();
     }
 
     [Test]
     public void Constructor_Completes()
     {
-      Assert.DoesNotThrow(() => new StandardsApplicableLogic(_datastore.Object, _validator.Object, _filter.Object, _context.Object));
+      Assert.DoesNotThrow(() => new StandardsApplicableLogic(_datastore.Object, _filter.Object, _context.Object));
     }
 
 

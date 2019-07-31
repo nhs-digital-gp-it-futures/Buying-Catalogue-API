@@ -17,7 +17,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
   {
     private Mock<IHttpContextAccessor> _context;
     private Mock<IClaimsDatastore<ClaimsBase>> _datastore;
-    private Mock<IClaimsValidator<ClaimsBase>> _validator;
     private Mock<IClaimsFilter<ClaimsBase>> _filter;
 
     [SetUp]
@@ -25,20 +24,19 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     {
       _context = new Mock<IHttpContextAccessor>();
       _datastore = new Mock<IClaimsDatastore<ClaimsBase>>();
-      _validator = new Mock<IClaimsValidator<ClaimsBase>>();
       _filter = new Mock<IClaimsFilter<ClaimsBase>>();
     }
 
     [Test]
     public void Constructor_Completes()
     {
-      Assert.DoesNotThrow(() => new DummyClaimsLogicBase(_datastore.Object, _validator.Object, _filter.Object, _context.Object));
+      Assert.DoesNotThrow(() => new DummyClaimsLogicBase(_datastore.Object, _filter.Object, _context.Object));
     }
 
     [Test]
     public void ById_CallsFilter()
     {
-      var logic = new DummyClaimsLogicBase(_datastore.Object, _validator.Object, _filter.Object, _context.Object);
+      var logic = new DummyClaimsLogicBase(_datastore.Object, _filter.Object, _context.Object);
 
       logic.ById("some Id");
 
@@ -48,7 +46,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [Test]
     public void BySolution_CallsFilter()
     {
-      var logic = new DummyClaimsLogicBase(_datastore.Object, _validator.Object, _filter.Object, _context.Object);
+      var logic = new DummyClaimsLogicBase(_datastore.Object, _filter.Object, _context.Object);
 
       logic.BySolution("some Id");
 
