@@ -4,7 +4,6 @@ using FluentValidation.Results;
 using Microsoft.AspNetCore.Http;
 using Moq;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
-using NHSD.GPITF.BuyingCatalog.Interfaces.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using NHSD.GPITF.BuyingCatalog.Tests;
 using NUnit.Framework;
@@ -23,7 +22,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     private Mock<ISolutionsValidator> _validator;
     private Mock<ISolutionsFilter> _filter;
     private Mock<IEvidenceBlobStoreLogic> _evidenceBlobStoreLogic;
-    private Mock<ISolutionsChangeNotifier> _notifier;
 
     [SetUp]
     public void SetUp()
@@ -35,7 +33,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       _validator = new Mock<ISolutionsValidator>();
       _filter = new Mock<ISolutionsFilter>();
       _evidenceBlobStoreLogic = new Mock<IEvidenceBlobStoreLogic>();
-      _notifier = new Mock<ISolutionsChangeNotifier>();
     }
 
     [Test]
@@ -180,83 +177,16 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       _modifier.Verify(x => x.ForUpdate(soln), Times.Once);
     }
 
-    [Test]
-    public void Update_Calls_Notifier_Once()
-    {
-      var logic = Create();
-      var soln = Creator.GetSolution();
-      var ctx = Creator.GetContext();
-      var contact = Creator.GetContact();
-      _context.Setup(c => c.HttpContext).Returns(ctx);
-      _contacts.Setup(c => c.ByEmail(ctx.Email())).Returns(contact);
-
-      var valres = new ValidationResult();
-      _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
-
-      logic.Update(soln);
-
-      _notifier.Verify(x => x.Notify(It.IsAny<ChangeRecord<Solutions>>()), Times.Once);
-    }
-
-    [Test]
-    public void Update_Calls_Notifier_With_Contact()
-    {
-      var logic = Create();
-      var soln = Creator.GetSolution();
-      var ctx = Creator.GetContext();
-      var contact = Creator.GetContact();
-      _context.Setup(c => c.HttpContext).Returns(ctx);
-      _contacts.Setup(c => c.ByEmail(ctx.Email())).Returns(contact);
-
-      var valres = new ValidationResult();
-      _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
-
-      logic.Update(soln);
-
-      _notifier.Verify(x => x.Notify(It.Is<ChangeRecord<Solutions>>(cr => cr.ModifierId == contact.Id)), Times.Once);
-    }
-
-    [Test]
-    public void Update_Calls_Notifier_With_OldEntity()
-    {
-      var logic = Create();
-      var oldSoln = Creator.GetSolution();
-      var soln = Creator.GetSolution();
-      var ctx = Creator.GetContext();
-      var contact = Creator.GetContact();
-      _context.Setup(c => c.HttpContext).Returns(ctx);
-      _contacts.Setup(c => c.ByEmail(ctx.Email())).Returns(contact);
-      _datastore.Setup(ds => ds.ById(soln.Id)).Returns(oldSoln);
-
-      var valres = new ValidationResult();
-      _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
-
-      logic.Update(soln);
-
-      _notifier.Verify(x => x.Notify(It.Is<ChangeRecord<Solutions>>(cr => cr.OldVersion == oldSoln)), Times.Once);
-    }
-
-    [Test]
-    public void Update_Calls_Notifier_With_NewEntity()
-    {
-      var logic = Create();
-      var soln = Creator.GetSolution();
-      var ctx = Creator.GetContext();
-      var contact = Creator.GetContact();
-      _context.Setup(c => c.HttpContext).Returns(ctx);
-      _contacts.Setup(c => c.ByEmail(ctx.Email())).Returns(contact);
-
-      var valres = new ValidationResult();
-      _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
-
-      logic.Update(soln);
-
-      _notifier.Verify(x => x.Notify(It.Is<ChangeRecord<Solutions>>(cr => cr.NewVersion == soln)), Times.Once);
-    }
-
     private SolutionsLogic Create()
     {
-      return new SolutionsLogic(_modifier.Object, _datastore.Object, _contacts.Object, _context.Object, _validator.Object, _filter.Object, _evidenceBlobStoreLogic.Object, _notifier.Object);
+      return new SolutionsLogic(
+        _modifier.Object,
+        _datastore.Object,
+        _contacts.Object,
+        _context.Object,
+        _validator.Object,
+        _filter.Object,
+        _evidenceBlobStoreLogic.Object);
     }
   }
 }

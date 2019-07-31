@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
-using NHSD.GPITF.BuyingCatalog.Interfaces.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +14,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     private readonly ISolutionsValidator _validator;
     private readonly ISolutionsFilter _filter;
     private readonly IEvidenceBlobStoreLogic _evidenceBlobStoreLogic;
-    private readonly ISolutionsChangeNotifier _notifier;
 
     public SolutionsLogic(
       ISolutionsModifier modifier,
@@ -24,8 +22,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       IHttpContextAccessor context,
       ISolutionsValidator validator,
       ISolutionsFilter filter,
-      IEvidenceBlobStoreLogic evidenceBlobStoreLogic,
-      ISolutionsChangeNotifier notifier) :
+      IEvidenceBlobStoreLogic evidenceBlobStoreLogic) :
       base(context)
     {
       _modifier = modifier;
@@ -34,7 +31,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       _validator = validator;
       _filter = filter;
       _evidenceBlobStoreLogic = evidenceBlobStoreLogic;
-      _notifier = notifier;
     }
 
     public IEnumerable<Solutions> ByFramework(string frameworkId)
@@ -71,11 +67,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
       _datastore.Update(solution);
 
-      var contact = _contacts.ByEmail(Context.Email());
-      var record = new ChangeRecord<Solutions>(contact.Id, oldSoln, solution);
-      _notifier.Notify(record);
-
-      // TODO   remove this code once we have activated SolutionChangeReceiver
       // create SharePoint folder structure
       if (solution.Status == SolutionStatus.Registered)
       {
