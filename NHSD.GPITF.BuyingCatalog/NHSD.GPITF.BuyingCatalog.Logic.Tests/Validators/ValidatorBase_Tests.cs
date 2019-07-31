@@ -31,10 +31,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
       var validator = new DummyValidatorBase(_context.Object, _logger.Object);
-      var evidence = Creator.GetEvidenceBase();
 
       validator.MustBeSupplier();
-      var valres = validator.Validate(evidence);
+      var valres = validator.Validate(new object());
 
       valres.Errors.Should().BeEmpty();
     }
@@ -45,10 +44,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     {
       _context.Setup(x => x.HttpContext).Returns(Creator.GetContext(role: role));
       var validator = new DummyValidatorBase(_context.Object, _logger.Object);
-      var evidence = Creator.GetEvidenceBase();
 
       validator.MustBeSupplier();
-      var valres = validator.Validate(evidence);
+      var valres = validator.Validate(new object());
 
       valres.Errors.Should()
         .ContainSingle(x => x.ErrorMessage == "Must be supplier")

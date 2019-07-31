@@ -34,16 +34,10 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
 
         // internal consistency checks
         ClaimedCapabilityMustBelongToSolution();
-        ClaimedCapabilityEvidenceMustBelongToClaim();
 
         ClaimedStandardMustBelongToSolution();
-        ClaimedStandardEvidenceMustBelongToClaim();
 
         TechnicalContactMustBelongToSolution();
-
-        // all previous versions in solution
-        ClaimedCapabilityEvidencePreviousVersionMustBelongToSolution();
-        ClaimedStandardEvidencePreviousVersionMustBelongToSolution();
 
         // One Rule to rule them all,
         // One Rule to find them,
@@ -83,28 +77,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
         .WithMessage("ClaimedStandard must belong to solution");
     }
 
-    public void ClaimedCapabilityEvidenceMustBelongToClaim()
-    {
-      RuleFor(x => x)
-        .Must(soln =>
-        {
-          var claimIds = soln.ClaimedCapability.Select(cc => cc.Id);
-          return soln.ClaimedCapabilityEvidence.All(cce => claimIds.Contains(cce.ClaimId));
-        })
-        .WithMessage("ClaimedCapabilityEvidence must belong to claim");
-    }
-
-    public void ClaimedStandardEvidenceMustBelongToClaim()
-    {
-      RuleFor(x => x)
-        .Must(soln =>
-        {
-          var claimIds = soln.ClaimedStandard.Select(cs => cs.Id);
-          return soln.ClaimedStandardEvidence.All(cse => claimIds.Contains(cse.ClaimId));
-        })
-        .WithMessage("ClaimedStandardEvidence must belong to claim");
-    }
-
     public void TechnicalContactMustBelongToSolution()
     {
       RuleFor(x => x)
@@ -113,30 +85,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
           return soln.TechnicalContact.All(tc => tc.SolutionId == soln.Solution.Id);
         })
         .WithMessage("TechnicalContact must belong to solution");
-    }
-
-    public void ClaimedCapabilityEvidencePreviousVersionMustBelongToSolution()
-    {
-      RuleFor(x => x)
-        .Must(soln =>
-        {
-          var evidenceIds = soln.ClaimedCapabilityEvidence.Select(cce => cce.Id);
-          var evidencePrevIds = soln.ClaimedCapabilityEvidence.Select(cce => cce.PreviousId).Where(id => id != null);
-          return evidencePrevIds.All(prevId => evidenceIds.Contains(prevId));
-        })
-        .WithMessage("ClaimedCapabilityEvidence previous version must belong to solution");
-    }
-
-    public void ClaimedStandardEvidencePreviousVersionMustBelongToSolution()
-    {
-      RuleFor(x => x)
-        .Must(soln =>
-        {
-          var evidenceIds = soln.ClaimedStandardEvidence.Select(cce => cce.Id);
-          var evidencePrevIds = soln.ClaimedStandardEvidence.Select(cce => cce.PreviousId).Where(id => id != null);
-          return evidencePrevIds.All(prevId => evidenceIds.Contains(prevId));
-        })
-        .WithMessage("ClaimedStandardEvidence previous version must belong to solution");
     }
 
     public void CheckUpdateAllowed()
@@ -156,22 +104,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
           return MustBePendingToChangeClaimedStandard(oldSolnEx, newSolnEx);
         })
         .WithMessage("Must Be Pending To Change Claimed Standard");
-
-      RuleFor(x => x)
-        .Must(newSolnEx =>
-        {
-          var oldSolnEx = _datastore.BySolution(newSolnEx.Solution.Id);
-          return MustBePendingToChangeClaimedCapabilityEvidence(oldSolnEx, newSolnEx);
-        })
-        .WithMessage("Must Be Pending To Change Claimed Capability Evidence");
-
-      RuleFor(x => x)
-        .Must(newSolnEx =>
-        {
-          var oldSolnEx = _datastore.BySolution(newSolnEx.Solution.Id);
-          return MustBePendingToChangeClaimedStandardEvidence(oldSolnEx, newSolnEx);
-        })
-        .WithMessage("Must Be Pending To Change Claimed Standard Evidence");
     }
 
     private static bool MustBePendingToChangeClaim<T>(
@@ -268,65 +200,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
 
       var same = (!newNotOld.Any() && !oldNotNew.Any()) ||
         IsPendingForEvidence(newSolnStatus);
-      if (!same)
-      {
-        onError();
-      }
-
-      return same;
-    }
-
-    // cannot change/remove ClaimedCapabilityEvidence but can add while pending
-    public bool MustBePendingToChangeClaimedCapabilityEvidence(SolutionEx oldSolnEx, SolutionEx newSolnEx)
-    {
-      return MustBePendingToChangeEvidence(
-        newSolnEx.Solution.Status,
-        oldSolnEx.ClaimedCapabilityEvidence,
-        newSolnEx.ClaimedCapabilityEvidence,
-        new CapabilitiesImplementedEvidenceComparer(),
-        () =>
-        {
-          var msg = new { ErrorMessage = nameof(MustBePendingToChangeClaimedCapabilityEvidence), ExistingValue = oldSolnEx };
-          _logger.LogError(JsonConvert.SerializeObject(msg));
-        });
-    }
-
-    // cannot change/remove ClaimedStandardEvidence but can add while pending
-    public bool MustBePendingToChangeClaimedStandardEvidence(SolutionEx oldSolnEx, SolutionEx newSolnEx)
-    {
-      return MustBePendingToChangeEvidence(
-        newSolnEx.Solution.Status,
-        oldSolnEx.ClaimedStandardEvidence,
-        newSolnEx.ClaimedStandardEvidence,
-        new StandardsApplicableEvidenceComparer(),
-        () =>
-        {
-          var msg = new { ErrorMessage = nameof(MustBePendingToChangeClaimedStandardEvidence), ExistingValue = oldSolnEx };
-          _logger.LogError(JsonConvert.SerializeObject(msg));
-        });
-    }
-
-
-    private static bool MustBePendingToChangeReview<T>(
-      SolutionStatus newSolnStatus,
-      IEnumerable<T> oldItems,
-      IEnumerable<T> newItems,
-      IEqualityComparer<T> comparer,
-      Action onError
-      ) where T : IHasId
-    {
-      var newNotOld = newItems.Except(oldItems, comparer).ToList();
-      var oldNotNew = oldItems.Except(newItems, comparer).ToList();
-
-      if (newNotOld.Any() &&
-        newNotOld.Count > oldNotNew.Count &&
-        IsPendingForReview(newSolnStatus))
-      {
-        // added
-        return true;
-      }
-
-      var same = !newNotOld.Any() && !oldNotNew.Any();
       if (!same)
       {
         onError();

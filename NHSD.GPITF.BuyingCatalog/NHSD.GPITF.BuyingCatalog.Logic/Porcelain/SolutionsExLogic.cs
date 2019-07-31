@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces.Porcelain;
-using NHSD.GPITF.BuyingCatalog.Models;
 using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +14,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
     private readonly ICapabilitiesImplementedModifier _capabilitiesImplementedModifier;
     private readonly IStandardsApplicableModifier _standardsApplicableModifier;
 
-    private readonly ICapabilitiesImplementedEvidenceModifier _capabilitiesImplementedEvidenceModifier;
-    private readonly IStandardsApplicableEvidenceModifier _standardsApplicableEvidenceModifier;
-
     private readonly ISolutionsExDatastore _datastore;
     private readonly ISolutionsExValidator _validator;
     private readonly ISolutionsExFilter _filter;
@@ -28,9 +24,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
 
       ICapabilitiesImplementedModifier capabilitiesImplementedModifier,
       IStandardsApplicableModifier standardsApplicableModifier,
-
-      ICapabilitiesImplementedEvidenceModifier capabilitiesImplementedEvidenceModifier,
-      IStandardsApplicableEvidenceModifier standardsApplicableEvidenceModifier,
 
       ISolutionsExDatastore datastore,
       IHttpContextAccessor context,
@@ -43,9 +36,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
 
       _capabilitiesImplementedModifier = capabilitiesImplementedModifier;
       _standardsApplicableModifier = standardsApplicableModifier;
-
-      _capabilitiesImplementedEvidenceModifier = capabilitiesImplementedEvidenceModifier;
-      _standardsApplicableEvidenceModifier = standardsApplicableEvidenceModifier;
 
       _datastore = datastore;
       _validator = validator;
@@ -66,9 +56,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
 
       solnEx.ClaimedCapability.ForEach(claim => _capabilitiesImplementedModifier.ForUpdate(claim));
       solnEx.ClaimedStandard.ForEach(claim => _standardsApplicableModifier.ForUpdate(claim));
-
-      solnEx.ClaimedCapabilityEvidence.ForEach(evidence => _capabilitiesImplementedEvidenceModifier.ForUpdate(evidence));
-      solnEx.ClaimedStandardEvidence.ForEach(evidence => _standardsApplicableEvidenceModifier.ForUpdate(evidence));
 
       _datastore.Update(solnEx);
     }

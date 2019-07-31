@@ -135,10 +135,8 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
       Solutions soln = null,
 
       List<CapabilitiesImplemented> claimedCap = null,
-      List<CapabilitiesImplementedEvidence> claimedCapEv = null,
 
       List<StandardsApplicable> claimedStd = null,
-      List<StandardsApplicableEvidence> claimedStdEv = null,
 
       List<TechnicalContacts> techCont = null
       )
@@ -149,18 +147,10 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
       {
         GetCapabilitiesImplemented(solnId: soln.Id)
       };
-      claimedCapEv = claimedCapEv ?? new List<CapabilitiesImplementedEvidence>
-      {
-        GetCapabilitiesImplementedEvidence(claimId: claimedCap.First().Id)
-      };
 
       claimedStd = claimedStd ?? new List<StandardsApplicable>
       {
         GetStandardsApplicable(solnId: soln.Id)
-      };
-      claimedStdEv = claimedStdEv ?? new List<StandardsApplicableEvidence>
-      {
-        GetStandardsApplicableEvidence(claimId: claimedStd.First().Id)
       };
 
       techCont = techCont ?? new List<TechnicalContacts>
@@ -173,10 +163,8 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
         Solution = soln,
 
         ClaimedCapability = claimedCap,
-        ClaimedCapabilityEvidence = claimedCapEv,
 
         ClaimedStandard = claimedStd,
-        ClaimedStandardEvidence = claimedStdEv,
 
         TechnicalContact = techCont
       };
@@ -276,69 +264,6 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
         OriginalDate = originalDate ?? DateTime.UtcNow,
         SubmittedOn = submittedOn ?? DateTime.UtcNow,
         AssignedOn = assignedOn ?? DateTime.UtcNow
-      };
-      Verifier.Verify(retval);
-      return retval;
-    }
-
-    public static DummyEvidenceBase GetEvidenceBase(
-      string id = null,
-      string prevId = null,
-      string claimId = null,
-      string createdById = null,
-      DateTime? createdOn = null,
-      DateTime? originalDate = null)
-    {
-      var retval = new DummyEvidenceBase
-      {
-        Id = id ?? Guid.NewGuid().ToString(),
-        PreviousId = prevId,
-        ClaimId = claimId ?? Guid.NewGuid().ToString(),
-        CreatedById = createdById ?? Guid.NewGuid().ToString(),
-        CreatedOn = createdOn ?? DateTime.Now,
-        OriginalDate = originalDate ?? DateTime.UtcNow
-      };
-      Verifier.Verify(retval);
-      return retval;
-    }
-
-    public static CapabilitiesImplementedEvidence GetCapabilitiesImplementedEvidence(
-      string id = null,
-      string prevId = null,
-      string claimId = null,
-      string createdById = null,
-      DateTime? createdOn = null,
-      DateTime? originalDate = null)
-    {
-      var retval = new CapabilitiesImplementedEvidence
-      {
-        Id = id ?? Guid.NewGuid().ToString(),
-        PreviousId = prevId,
-        ClaimId = claimId ?? Guid.NewGuid().ToString(),
-        CreatedById = createdById ?? Guid.NewGuid().ToString(),
-        CreatedOn = createdOn ?? DateTime.UtcNow,
-        OriginalDate = originalDate ?? DateTime.UtcNow
-      };
-      Verifier.Verify(retval);
-      return retval;
-    }
-
-    public static StandardsApplicableEvidence GetStandardsApplicableEvidence(
-      string id = null,
-      string prevId = null,
-      string claimId = null,
-      string createdById = null,
-      DateTime? createdOn = null,
-      DateTime? originalDate = null)
-    {
-      var retval = new StandardsApplicableEvidence
-      {
-        Id = id ?? Guid.NewGuid().ToString(),
-        PreviousId = prevId,
-        ClaimId = claimId ?? Guid.NewGuid().ToString(),
-        CreatedById = createdById ?? Guid.NewGuid().ToString(),
-        CreatedOn = createdOn ?? DateTime.UtcNow,
-        OriginalDate = originalDate ?? DateTime.UtcNow
       };
       Verifier.Verify(retval);
       return retval;

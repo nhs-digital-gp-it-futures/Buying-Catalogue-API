@@ -54,8 +54,6 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Importer
       yield return typeof(FrameworkSolution);
       yield return typeof(FrameworkStandard);
       yield return typeof(CapabilityStandard);
-      yield return typeof(CapabilitiesImplementedEvidence);
-      yield return typeof(StandardsApplicableEvidence);
     }
 
     private static IEnumerable<string> GetDataFiles()
@@ -75,8 +73,6 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Importer
       yield return typeof(StandardsClassMap);
       yield return typeof(CapabilitiesImplementedClassMap);
       yield return typeof(StandardsApplicableClassMap);
-      yield return typeof(CapabilitiesImplementedEvidenceClassMap);
-      yield return typeof(StandardsApplicableEvidenceClassMap);
     }
 
     private readonly string _dataDirectory;
@@ -200,24 +196,6 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Importer
       Map(m => m.StandardId).Index(2);
       Map(m => m.Status).Index(3);
       Map(m => m.OwnerId).TypeConverterOption.NullValues(string.Empty);
-    }
-  }
-
-  public sealed class CapabilitiesImplementedEvidenceClassMap : ClassMap<CapabilitiesImplementedEvidence>
-  {
-    public CapabilitiesImplementedEvidenceClassMap()
-    {
-      AutoMap();
-      Map(m => m.PreviousId).TypeConverterOption.NullValues(string.Empty);
-    }
-  }
-
-  public sealed class StandardsApplicableEvidenceClassMap : ClassMap<StandardsApplicableEvidence>
-  {
-    public StandardsApplicableEvidenceClassMap()
-    {
-      AutoMap();
-      Map(m => m.PreviousId).TypeConverterOption.NullValues(string.Empty);
     }
   }
 }

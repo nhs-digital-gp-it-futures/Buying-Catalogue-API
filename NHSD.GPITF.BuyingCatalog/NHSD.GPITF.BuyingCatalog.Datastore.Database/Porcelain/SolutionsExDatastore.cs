@@ -15,10 +15,8 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
     private readonly ITechnicalContactsDatastore _technicalContactDatastore;
 
     private readonly ICapabilitiesImplementedDatastore _claimedCapabilityDatastore;
-    private readonly ICapabilitiesImplementedEvidenceDatastore _claimedCapabilityEvidenceDatastore;
 
     private readonly IStandardsApplicableDatastore _claimedStandardDatastore;
-    private readonly IStandardsApplicableEvidenceDatastore _claimedStandardEvidenceDatastore;
 
     public SolutionsExDatastore(
       IDbConnectionFactory dbConnectionFactory,
@@ -28,10 +26,8 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
       ITechnicalContactsDatastore technicalContactDatastore,
 
       ICapabilitiesImplementedDatastore claimedCapabilityDatastore,
-      ICapabilitiesImplementedEvidenceDatastore claimedCapabilityEvidenceDatastore,
 
-      IStandardsApplicableDatastore claimedStandardDatastore,
-      IStandardsApplicableEvidenceDatastore claimedStandardEvidenceDatastore
+      IStandardsApplicableDatastore claimedStandardDatastore
       ) :
       base(dbConnectionFactory, logger, policy)
     {
@@ -39,10 +35,8 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
       _technicalContactDatastore = technicalContactDatastore;
 
       _claimedCapabilityDatastore = claimedCapabilityDatastore;
-      _claimedCapabilityEvidenceDatastore = claimedCapabilityEvidenceDatastore;
 
       _claimedStandardDatastore = claimedStandardDatastore;
-      _claimedStandardEvidenceDatastore = claimedStandardEvidenceDatastore;
     }
 
     public SolutionEx BySolution(string solutionId)
@@ -56,16 +50,6 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
           ClaimedCapability = _claimedCapabilityDatastore.BySolution(solutionId).ToList(),
           ClaimedStandard = _claimedStandardDatastore.BySolution(solutionId).ToList()
         };
-
-        // populate Evidence + Review
-        retval.ClaimedCapabilityEvidence = retval.ClaimedCapability
-          .SelectMany(cc => _claimedCapabilityEvidenceDatastore.ByClaim(cc.Id))
-            .SelectMany(x => x)
-            .ToList();
-        retval.ClaimedStandardEvidence = retval.ClaimedStandard
-          .SelectMany(cs => _claimedStandardEvidenceDatastore.ByClaim(cs.Id))
-            .SelectMany(x => x)
-            .ToList();
 
         return retval;
       });
@@ -89,9 +73,6 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
 
           // re-insert ClaimedCapabilities + Evidence + Reviews
           solnEx.ClaimedCapability.ForEach(cc => _dbConnection.Insert(cc, trans));
-
-          // re-insert each chain, starting at the root ie PreviousId==null
-          GetInsertionTree(solnEx.ClaimedCapabilityEvidence).ForEach(cce => _dbConnection.Insert(cce, trans));
           #endregion
 
           #region ClaimedStandard
@@ -103,9 +84,6 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
 
           // re-insert ClaimedStandards + Evidence + Reviews
           solnEx.ClaimedStandard.ForEach(cs => _dbConnection.Insert(cs, trans));
-
-          // re-insert each chain, starting at the root ie PreviousId==null
-          GetInsertionTree(solnEx.ClaimedStandardEvidence).ForEach(cse => _dbConnection.Insert(cse, trans));
           #endregion
 
           #region TechnicalContacts
@@ -132,31 +110,6 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
 
         return retval;
       });
-    }
-
-    public static List<T> GetInsertionTree<T>(List<T> allNodes) where T : IHasPreviousId
-    {
-      var roots = GetRoots(allNodes);
-      var tree = new List<T>(roots);
-
-      var next = GetChildren(roots, allNodes);
-      while (next.Any())
-      {
-        tree.AddRange(next);
-        next = GetChildren(next, allNodes);
-      }
-
-      return tree;
-    }
-
-    private static List<T> GetRoots<T>(List<T> allNodes) where T : IHasPreviousId
-    {
-      return allNodes.Where(x => x.PreviousId == null).ToList();
-    }
-
-    private static List<T> GetChildren<T>(List<T> parents, List<T> allNodes) where T : IHasPreviousId
-    {
-      return parents.SelectMany(parent => allNodes.Where(x => x.PreviousId == parent.Id)).ToList();
     }
   }
 }
