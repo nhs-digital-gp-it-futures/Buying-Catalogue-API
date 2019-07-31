@@ -24,14 +24,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       _claimDatastore = claimDatastore;
       _contactsDatastore = contactsDatastore;
       _solutionsDatastore = solutionsDatastore;
-
-      RuleSet(nameof(IClaimsLogic<T>.Delete), () =>
-      {
-        MustBeValidId();
-        MustBeValidSolutionId();
-        MustBeSameOrganisation();
-        MustBePending();
-      });
     }
 
     public void MustBeValidSolutionId()

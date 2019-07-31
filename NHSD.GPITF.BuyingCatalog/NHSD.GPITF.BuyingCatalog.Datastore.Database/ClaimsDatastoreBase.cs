@@ -56,10 +56,5 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
     {
       return BySolution(solutionId);
     }
-
-    void IClaimsDatastore<ClaimsBase>.Delete(ClaimsBase claim)
-    {
-      Delete((T)claim);
-    }
   }
 }

@@ -7,7 +7,6 @@ namespace NHSD.GPITF.BuyingCatalog.Interfaces
   {
     T ById(string id);
     IEnumerable<T> BySolution(string solutionId);
-    void Delete(T claim);
   }
 #pragma warning restore CS1591
 }

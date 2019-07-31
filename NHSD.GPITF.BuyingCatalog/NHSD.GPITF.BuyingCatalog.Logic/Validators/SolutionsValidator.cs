@@ -27,16 +27,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       _solutionDatastore = solutionDatastore;
       _organisationDatastore = organisationDatastore;
       _env = env;
-
-      RuleSet(nameof(ISolutionsLogic.Delete), () =>
-      {
-        MustBeDevelopment();
-        MustBeAdminOrSupplier();
-        MustBeValidId();
-        MustBeValidOrganisationId();
-        MustBeCurrentVersion();
-        PreviousVersionMustBeFromSameOrganisation();
-      });
     }
 
     public void MustBeValidId()

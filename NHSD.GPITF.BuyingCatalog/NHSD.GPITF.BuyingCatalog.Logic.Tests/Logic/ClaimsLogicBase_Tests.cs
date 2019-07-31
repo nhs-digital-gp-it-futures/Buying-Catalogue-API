@@ -36,22 +36,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void Delete_CallsValidator_WithRuleset()
-    {
-      var logic = new DummyClaimsLogicBase(_datastore.Object, _validator.Object, _filter.Object, _context.Object);
-      var claim = Creator.GetClaimsBase();
-
-      var valres = new ValidationResult();
-      _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
-
-      logic.Delete(claim);
-
-      _validator.Verify(x => x.ValidateAndThrowEx(
-        It.Is<ClaimsBase>(c => c == claim),
-        It.Is<string>(rs => rs == nameof(IClaimsLogic<ClaimsBase>.Delete))), Times.Once());
-    }
-
-    [Test]
     public void ById_CallsFilter()
     {
       var logic = new DummyClaimsLogicBase(_datastore.Object, _validator.Object, _filter.Object, _context.Object);

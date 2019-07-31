@@ -33,12 +33,5 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     {
       return _filter.Filter(_datastore.BySolution(solutionId));
     }
-
-    public void Delete(T claim)
-    {
-      _validator.ValidateAndThrowEx(claim, ruleSet: nameof(IClaimsLogic<T>.Delete));
-
-      _datastore.Delete(claim);
-    }
   }
 }

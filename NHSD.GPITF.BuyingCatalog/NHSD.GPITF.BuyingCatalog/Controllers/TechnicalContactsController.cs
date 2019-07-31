@@ -58,29 +58,5 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
 
       return new OkObjectResult(retval);
     }
-
-    /// <summary>
-    /// Delete an existing Technical Contact for a Solution
-    /// </summary>
-    /// <param name="techCont">existing Technical Contact information</param>
-    /// <response code="200">Success</response>
-    /// <response code="404">Technical Contact or Solution not found in CRM</response>
-    [HttpDelete]
-    [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Technical Contact or Solution not found in CRM")]
-    [SwaggerRequestExample(typeof(TechnicalContacts), typeof(TechnicalContactsExample), jsonConverter: typeof(StringEnumConverter))]
-    public IActionResult Delete([FromBody]TechnicalContacts techCont)
-    {
-      try
-      {
-        _logic.Delete(techCont);
-        return new OkResult();
-      }
-      catch (Exception ex)
-      {
-        return new NotFoundObjectResult(ex);
-      }
-    }
   }
 }

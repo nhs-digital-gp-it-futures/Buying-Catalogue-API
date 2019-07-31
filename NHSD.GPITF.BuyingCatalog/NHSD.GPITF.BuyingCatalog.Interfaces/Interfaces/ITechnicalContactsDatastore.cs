@@ -7,7 +7,6 @@ namespace NHSD.GPITF.BuyingCatalog.Interfaces
   public interface ITechnicalContactsDatastore
   {
     IEnumerable<TechnicalContacts> BySolution(string solutionId);
-    void Delete(TechnicalContacts techCont);
   }
 #pragma warning restore CS1591
 }

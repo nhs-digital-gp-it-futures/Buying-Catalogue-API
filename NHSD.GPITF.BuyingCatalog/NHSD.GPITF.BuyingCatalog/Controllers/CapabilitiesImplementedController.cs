@@ -75,29 +75,5 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
 
       return new OkObjectResult(retval);
     }
-
-    /// <summary>
-    /// Delete an existing claimed capability for a solution
-    /// </summary>
-    /// <param name="claimedcapability">existing claimed capability information</param>
-    /// <response code="200">Success</response>
-    /// <response code="404">Claimed standard not found in CRM</response>
-    [HttpDelete]
-    [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "ClaimedCapability not found in CRM")]
-    [SwaggerRequestExample(typeof(CapabilitiesImplemented), typeof(CapabilitiesImplementedExample), jsonConverter: typeof(StringEnumConverter))]
-    public IActionResult Delete([FromBody]CapabilitiesImplemented claimedcapability)
-    {
-      try
-      {
-        _logic.Delete(claimedcapability);
-        return new OkResult();
-      }
-      catch (Exception ex)
-      {
-        return new NotFoundObjectResult(ex);
-      }
-    }
   }
 }

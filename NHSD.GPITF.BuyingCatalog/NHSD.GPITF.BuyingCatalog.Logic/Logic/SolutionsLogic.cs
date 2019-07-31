@@ -41,12 +41,5 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     {
       return _filter.Filter(_datastore.ByOrganisation(organisationId));
     }
-
-    public void Delete(Solutions solution)
-    {
-      _validator.ValidateAndThrowEx(solution, ruleSet: nameof(ISolutionsLogic.Delete));
-
-      _datastore.Delete(solution);
-    }
   }
 }

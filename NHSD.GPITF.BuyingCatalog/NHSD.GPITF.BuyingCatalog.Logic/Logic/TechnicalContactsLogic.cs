@@ -27,11 +27,5 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     {
       return _filter.Filter(_datastore.BySolution(solutionId));
     }
-
-    public void Delete(TechnicalContacts techCont)
-    {
-      _validator.ValidateAndThrowEx(techCont, ruleSet: nameof(ITechnicalContactsLogic.Delete));
-      _datastore.Delete(techCont);
-    }
   }
 }

@@ -75,29 +75,5 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
 
       return new OkObjectResult(retval);
     }
-
-    /// <summary>
-    /// Delete an existing claimed standard for a solution
-    /// </summary>
-    /// <param name="claimedstandard">existing claimed standard information</param>
-    /// <response code="200">Success</response>
-    /// <response code="404">Claimed standard not found in CRM</response>
-    [HttpDelete]
-    [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "ClaimedStandard not found in CRM")]
-    [SwaggerRequestExample(typeof(StandardsApplicable), typeof(StandardsApplicableExample), jsonConverter: typeof(StringEnumConverter))]
-    public IActionResult Delete([FromBody]StandardsApplicable claimedstandard)
-    {
-      try
-      {
-        _logic.Delete(claimedstandard);
-        return new OkResult();
-      }
-      catch (Exception ex)
-      {
-        return new NotFoundObjectResult(ex);
-      }
-    }
   }
 }
