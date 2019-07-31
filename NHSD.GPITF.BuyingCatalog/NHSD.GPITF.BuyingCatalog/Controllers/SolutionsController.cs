@@ -98,34 +98,6 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     }
 
     /// <summary>
-    /// Update an existing solution with new information
-    /// </summary>
-    /// <param name="solution">solution with updated information</param>
-    /// <response code="200">Success</response>
-    /// <response code="404">Organisation or solution not found in CRM</response>
-    [HttpPut]
-    [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Organisation or solution not found in CRM")]
-    [SwaggerRequestExample(typeof(Solutions), typeof(SolutionsExample), jsonConverter: typeof(StringEnumConverter))]
-    public IActionResult Update([FromBody]Solutions solution)
-    {
-      try
-      {
-        _logic.Update(solution);
-        return new OkResult();
-      }
-      catch (FluentValidation.ValidationException ex)
-      {
-        return new InternalServerErrorObjectResult(ex);
-      }
-      catch (Exception ex)
-      {
-        return new NotFoundObjectResult(ex);
-      }
-    }
-
-    /// <summary>
     /// Delete an existing solution
     /// DEVELOPMENT MODE ONLY
     /// </summary>

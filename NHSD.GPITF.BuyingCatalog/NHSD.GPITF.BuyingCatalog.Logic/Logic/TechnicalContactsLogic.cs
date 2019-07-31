@@ -33,11 +33,5 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       _validator.ValidateAndThrowEx(techCont, ruleSet: nameof(ITechnicalContactsLogic.Delete));
       _datastore.Delete(techCont);
     }
-
-    public void Update(TechnicalContacts techCont)
-    {
-      _validator.ValidateAndThrowEx(techCont, ruleSet: nameof(ITechnicalContactsLogic.Update));
-      _datastore.Update(techCont);
-    }
   }
 }

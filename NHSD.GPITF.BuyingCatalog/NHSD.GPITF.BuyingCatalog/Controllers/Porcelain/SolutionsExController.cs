@@ -54,40 +54,6 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers.Porcelain
     }
 
     /// <summary>
-    /// Update an existing Solution, TechnicalContact, ClaimedCapability, ClaimedStandard et al with new information
-    /// </summary>
-    /// <param name="solnEx">Solution, TechnicalContact, ClaimedCapability, ClaimedStandard et al with updated information</param>
-    /// <response code="200">Success</response>
-    /// <response code="404">Solution, TechnicalContact, ClaimedCapability, ClaimedStandard et al not found in CRM</response>
-    /// <response code="500">Datastore exception</response>
-    [HttpPut]
-    [Route("Update")]
-    [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Solution, TechnicalContact, ClaimedCapability, ClaimedStandard et al not found in CRM")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.InternalServerError, description: "Datastore exception")]
-    public IActionResult Update([FromBody]SolutionEx solnEx)
-    {
-      try
-      {
-        _logic.Update(solnEx);
-        return new OkResult();
-      }
-      catch (ArgumentOutOfRangeException ex)
-      {
-        return new NotFoundObjectResult(ex);
-      }
-      catch (InvalidOperationException ex)
-      {
-        return new InternalServerErrorObjectResult(ex);
-      }
-      catch (Exception ex)
-      {
-        return new InternalServerErrorObjectResult(ex);
-      }
-    }
-
-    /// <summary>
     /// Get a list of Solutions, each with a list of corresponding TechnicalContact, ClaimedCapability, ClaimedStandard et al
     /// </summary>
     /// <param name="organisationId">CRM identifier of Organisation</param>

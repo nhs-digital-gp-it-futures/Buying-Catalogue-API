@@ -77,30 +77,6 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     }
 
     /// <summary>
-    /// Update an existing claimed capability with new information
-    /// </summary>
-    /// <param name="claimedcapability">claimed capability with updated information</param>
-    /// <response code="200">Success</response>
-    /// <response code="404">Solution or ClaimedCapability not found in CRM</response>
-    [HttpPut]
-    [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Solution or ClaimedCapability not found in CRM")]
-    [SwaggerRequestExample(typeof(CapabilitiesImplemented), typeof(CapabilitiesImplementedExample), jsonConverter: typeof(StringEnumConverter))]
-    public IActionResult Update([FromBody]CapabilitiesImplemented claimedcapability)
-    {
-      try
-      {
-        _logic.Update(claimedcapability);
-        return new OkResult();
-      }
-      catch (Exception ex)
-      {
-        return new NotFoundObjectResult(ex);
-      }
-    }
-
-    /// <summary>
     /// Delete an existing claimed capability for a solution
     /// </summary>
     /// <param name="claimedcapability">existing claimed capability information</param>

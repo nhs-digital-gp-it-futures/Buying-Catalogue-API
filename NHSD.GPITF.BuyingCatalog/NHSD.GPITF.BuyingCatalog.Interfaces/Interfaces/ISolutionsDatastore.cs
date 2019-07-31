@@ -9,7 +9,6 @@ namespace NHSD.GPITF.BuyingCatalog.Interfaces
     IEnumerable<Solutions> ByFramework(string frameworkId);
     Solutions ById(string id);
     IEnumerable<Solutions> ByOrganisation(string organisationId);
-    void Update(Solutions solution);
     void Delete(Solutions solution);
   }
 #pragma warning restore CS1591

@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Datastore.Database.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -51,20 +50,6 @@ select * from Solutions where Id not in
   select PreviousId from Solutions where PreviousId is not null
 )
 ";        return _dbConnection.Query<Solutions>(sql).Where(soln => soln.OrganisationId == organisationId);
-      });
-    }
-
-    public void Update(Solutions solution)
-    {
-      GetInternal(() =>
-      {
-        using (var trans = _dbConnection.BeginTransaction())
-        {
-          solution.ModifiedOn = DateTime.UtcNow;
-          _dbConnection.Update(solution, trans);
-          trans.Commit();
-          return 0;
-        }
       });
     }
 

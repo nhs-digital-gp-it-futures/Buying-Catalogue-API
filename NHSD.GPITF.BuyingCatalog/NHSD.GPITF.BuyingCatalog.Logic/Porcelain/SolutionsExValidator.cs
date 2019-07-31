@@ -26,35 +26,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
     {
       _datastore = datastore;
       _solutionsValidator = solutionsValidator;
-
-      RuleSet(nameof(ISolutionsExLogic.Update), () =>
-      {
-        // use Solution validator
-        MustBeValidSolution();
-
-        // internal consistency checks
-        ClaimedCapabilityMustBelongToSolution();
-
-        ClaimedStandardMustBelongToSolution();
-
-        TechnicalContactMustBelongToSolution();
-
-        // One Rule to rule them all,
-        // One Rule to find them,
-        // One Rule to bring them all,
-        // and in the darkness bind them
-        CheckUpdateAllowed();
-      });
-    }
-
-    public void MustBeValidSolution()
-    {
-      RuleFor(x => x.Solution)
-        .Must(soln =>
-        {
-          _solutionsValidator.ValidateAndThrowEx(soln, ruleSet: nameof(ISolutionsLogic.Update));
-          return true;
-        });
     }
 
     public void ClaimedCapabilityMustBelongToSolution()
@@ -171,43 +142,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
       return same;
     }
 
-    private static bool MustBePendingToChangeEvidence<T>(
-      SolutionStatus newSolnStatus,
-      IEnumerable<T> oldItems,
-      IEnumerable<T> newItems,
-      IEqualityComparer<T> comparer,
-      Action onError
-      ) where T : IHasId
-    {
-      var newNotOld = newItems.Except(oldItems, comparer).ToList();
-      var oldNotNew = oldItems.Except(newItems, comparer).ToList();
-
-      if (newNotOld.Any() &&
-        newItems.Count() > oldItems.Count() &&
-        IsPendingForEvidence(newSolnStatus))
-      {
-        // added
-        return true;
-      }
-
-      if (oldNotNew.Any() &&
-        oldItems.Count() > newItems.Count() &&
-        IsPendingForEvidence(newSolnStatus))
-      {
-        // removed
-        return true;
-      }
-
-      var same = (!newNotOld.Any() && !oldNotNew.Any()) ||
-        IsPendingForEvidence(newSolnStatus);
-      if (!same)
-      {
-        onError();
-      }
-
-      return same;
-    }
-
     // check every ClaimedCapability
     // check every ClaimedStandard
     // check every ClaimedCapabilityEvidence
@@ -220,20 +154,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
       return status == SolutionStatus.Draft ||
         status == SolutionStatus.Registered ||
         status == SolutionStatus.CapabilitiesAssessment ||
-        status == SolutionStatus.StandardsCompliance;
-    }
-
-    private static bool IsPendingForEvidence(SolutionStatus status)
-    {
-      return
-        status == SolutionStatus.Registered ||
-        status == SolutionStatus.CapabilitiesAssessment ||
-        status == SolutionStatus.StandardsCompliance;
-    }
-
-    private static bool IsPendingForReview(SolutionStatus status)
-    {
-      return status == SolutionStatus.CapabilitiesAssessment ||
         status == SolutionStatus.StandardsCompliance;
     }
   }

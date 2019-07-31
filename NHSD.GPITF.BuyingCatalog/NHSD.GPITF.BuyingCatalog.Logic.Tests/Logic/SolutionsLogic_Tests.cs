@@ -15,7 +15,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
   [TestFixture]
   public sealed class SolutionsLogic_Tests
   {
-    private Mock<ISolutionsModifier> _modifier;
     private Mock<ISolutionsDatastore> _datastore;
     private Mock<IContactsDatastore> _contacts;
     private Mock<IHttpContextAccessor> _context;
@@ -25,7 +24,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     [SetUp]
     public void SetUp()
     {
-      _modifier = new Mock<ISolutionsModifier>();
       _datastore = new Mock<ISolutionsDatastore>();
       _contacts = new Mock<IContactsDatastore>();
       _context = new Mock<IHttpContextAccessor>();
@@ -69,46 +67,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       _filter.Verify(x => x.Filter(It.IsAny<IEnumerable<Solutions>>()), Times.Once());
     }
 
-    [Test]
-    public void Update_CallsValidator_WithRuleset()
-    {
-      var logic = Create();
-      var soln = Creator.GetSolution();
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
-      _contacts.Setup(x => x.ByEmail(It.IsAny<string>())).Returns(Creator.GetContact());
-
-      var valres = new ValidationResult();
-      _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
-
-      logic.Update(soln);
-
-      _validator.Verify(x => x.ValidateAndThrowEx(
-        It.Is<Solutions>(s => s == soln),
-        It.Is<string>(rs => rs == nameof(ISolutionsLogic.Update))), Times.Once());
-    }
-
-    [Test]
-    public void Update_Calls_Modifier()
-    {
-      var logic = Create();
-      var soln = Creator.GetSolution();
-      var ctx = Creator.GetContext();
-      var contact = Creator.GetContact();
-      _context.Setup(c => c.HttpContext).Returns(ctx);
-      _contacts.Setup(c => c.ByEmail(ctx.Email())).Returns(contact);
-
-      var valres = new ValidationResult();
-      _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
-
-      logic.Update(soln);
-
-      _modifier.Verify(x => x.ForUpdate(soln), Times.Once);
-    }
-
     private SolutionsLogic Create()
     {
       return new SolutionsLogic(
-        _modifier.Object,
         _datastore.Object,
         _contacts.Object,
         _context.Object,

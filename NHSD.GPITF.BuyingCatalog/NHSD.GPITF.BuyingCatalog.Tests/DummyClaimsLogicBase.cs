@@ -8,12 +8,11 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
   public sealed class DummyClaimsLogicBase : ClaimsLogicBase<ClaimsBase>
   {
     public DummyClaimsLogicBase(
-      IClaimsBaseModifier<ClaimsBase> modifier,
       IClaimsDatastore<ClaimsBase> datastore,
       IClaimsValidator<ClaimsBase> validator,
       IClaimsFilter<ClaimsBase> filter,
       IHttpContextAccessor context) :
-      base(modifier, datastore, validator, filter, context)
+      base(datastore, validator, filter, context)
     {
     }
   }

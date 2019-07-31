@@ -81,18 +81,5 @@ select * from Standards where Id not in
         return _dbConnection.Query<Standards>(sql);
       });
     }
-
-    public void Update(Standards standard)
-    {
-      GetInternal(() =>
-      {
-        using (var trans = _dbConnection.BeginTransaction())
-        {
-          _dbConnection.Update(standard, trans);
-          trans.Commit();
-          return 0;
-        }
-      });
-    }
   }
 }

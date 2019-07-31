@@ -18,12 +18,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     {
       _solutionDatastore = solutionDatastore;
 
-      RuleSet(nameof(ITechnicalContactsLogic.Update), () =>
-      {
-        MustBeAdminOrSupplier();
-        SupplierOwn();
-      });
-
       RuleSet(nameof(ITechnicalContactsLogic.Delete), () =>
       {
         MustBeAdminOrSupplier();

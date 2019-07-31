@@ -8,14 +8,12 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 {
   public sealed class SolutionsLogic : LogicBase, ISolutionsLogic
   {
-    private readonly ISolutionsModifier _modifier;
     private readonly ISolutionsDatastore _datastore;
     private readonly IContactsDatastore _contacts;
     private readonly ISolutionsValidator _validator;
     private readonly ISolutionsFilter _filter;
 
     public SolutionsLogic(
-      ISolutionsModifier modifier,
       ISolutionsDatastore datastore,
       IContactsDatastore contacts,
       IHttpContextAccessor context,
@@ -23,7 +21,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       ISolutionsFilter filter) :
       base(context)
     {
-      _modifier = modifier;
       _datastore = datastore;
       _contacts = contacts;
       _validator = validator;
@@ -43,15 +40,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     public IEnumerable<Solutions> ByOrganisation(string organisationId)
     {
       return _filter.Filter(_datastore.ByOrganisation(organisationId));
-    }
-
-    public void Update(Solutions solution)
-    {
-      _validator.ValidateAndThrowEx(solution, ruleSet: nameof(ISolutionsLogic.Update));
-
-      _modifier.ForUpdate(solution);
-
-      _datastore.Update(solution);
     }
 
     public void Delete(Solutions solution)

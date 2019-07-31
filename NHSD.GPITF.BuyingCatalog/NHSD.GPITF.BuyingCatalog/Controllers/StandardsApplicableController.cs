@@ -77,30 +77,6 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     }
 
     /// <summary>
-    /// Update an existing claimed standard with new information
-    /// </summary>
-    /// <param name="claimedstandard">claimed standard with updated information</param>
-    /// <response code="200">Success</response>
-    /// <response code="404">Solution or ClaimedStandard not found in CRM</response>
-    [HttpPut]
-    [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Solution or ClaimedStandard not found in CRM")]
-    [SwaggerRequestExample(typeof(StandardsApplicable), typeof(StandardsApplicableExample), jsonConverter: typeof(StringEnumConverter))]
-    public IActionResult Update([FromBody]StandardsApplicable claimedstandard)
-    {
-      try
-      {
-        _logic.Update(claimedstandard);
-        return new OkResult();
-      }
-      catch (Exception ex)
-      {
-        return new NotFoundObjectResult(ex);
-      }
-    }
-
-    /// <summary>
     /// Delete an existing claimed standard for a solution
     /// </summary>
     /// <param name="claimedstandard">existing claimed standard information</param>
