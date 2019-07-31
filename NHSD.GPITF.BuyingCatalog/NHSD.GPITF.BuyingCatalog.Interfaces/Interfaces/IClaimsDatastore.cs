@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace NHSD.GPITF.BuyingCatalog.Interfaces
 {
 #pragma warning disable CS1591
-  public interface IClaimsDatastore<T> where T : ClaimsBase
+  public interface IClaimsDatastore<out T> where T : ClaimsBase
   {
     T ById(string id);
     IEnumerable<T> BySolution(string solutionId);
