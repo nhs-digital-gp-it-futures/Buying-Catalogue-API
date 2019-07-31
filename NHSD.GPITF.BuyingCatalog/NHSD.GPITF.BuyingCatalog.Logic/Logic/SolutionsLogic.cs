@@ -9,21 +9,15 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
   public sealed class SolutionsLogic : LogicBase, ISolutionsLogic
   {
     private readonly ISolutionsDatastore _datastore;
-    private readonly IContactsDatastore _contacts;
-    private readonly ISolutionsValidator _validator;
     private readonly ISolutionsFilter _filter;
 
     public SolutionsLogic(
       ISolutionsDatastore datastore,
-      IContactsDatastore contacts,
       IHttpContextAccessor context,
-      ISolutionsValidator validator,
       ISolutionsFilter filter) :
       base(context)
     {
       _datastore = datastore;
-      _contacts = contacts;
-      _validator = validator;
       _filter = filter;
     }
 

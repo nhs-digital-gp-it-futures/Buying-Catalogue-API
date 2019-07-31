@@ -9,18 +9,15 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
   public sealed class ContactsLogic : LogicBase, IContactsLogic
   {
     private readonly IContactsDatastore _datastore;
-    private readonly IContactsValidator _validator;
     private readonly IContactsFilter _filter;
 
     public ContactsLogic(
       IContactsDatastore datastore,
       IHttpContextAccessor context,
-      IContactsValidator validator,
       IContactsFilter filter) :
       base(context)
     {
       _datastore = datastore;
-      _validator = validator;
       _filter = filter;
     }
 

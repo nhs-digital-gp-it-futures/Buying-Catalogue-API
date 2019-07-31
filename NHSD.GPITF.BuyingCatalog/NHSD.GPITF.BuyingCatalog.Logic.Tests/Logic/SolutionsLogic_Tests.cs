@@ -18,7 +18,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     private Mock<ISolutionsDatastore> _datastore;
     private Mock<IContactsDatastore> _contacts;
     private Mock<IHttpContextAccessor> _context;
-    private Mock<ISolutionsValidator> _validator;
     private Mock<ISolutionsFilter> _filter;
 
     [SetUp]
@@ -27,7 +26,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       _datastore = new Mock<ISolutionsDatastore>();
       _contacts = new Mock<IContactsDatastore>();
       _context = new Mock<IHttpContextAccessor>();
-      _validator = new Mock<ISolutionsValidator>();
       _filter = new Mock<ISolutionsFilter>();
     }
 
@@ -71,9 +69,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     {
       return new SolutionsLogic(
         _datastore.Object,
-        _contacts.Object,
         _context.Object,
-        _validator.Object,
         _filter.Object);
     }
   }
