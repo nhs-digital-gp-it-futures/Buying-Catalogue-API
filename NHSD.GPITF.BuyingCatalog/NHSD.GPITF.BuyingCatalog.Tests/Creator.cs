@@ -38,11 +38,6 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
       return response;
     }
 
-    public static CachedUserInfoResponse GetCachedUserInfoResponseExpired(UserInfoResponse userInfoResponse)
-    {
-      return new CachedUserInfoResponse(userInfoResponse, new DateTime(2006, 2, 20));
-    }
-
     public static Frameworks GetFramework(
       string id = null)
     {
