@@ -37,15 +37,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       return _filter.Filter(_datastore.BySolution(solutionId));
     }
 
-    public T Create(T claim)
-    {
-      _validator.ValidateAndThrowEx(claim, ruleSet: nameof(IClaimsLogic<T>.Create));
-
-      _modifier.ForCreate(claim);
-
-      return _datastore.Create(claim);
-    }
-
     public virtual void Update(T claim)
     {
       _validator.ValidateAndThrowEx(claim, ruleSet: nameof(IClaimsLogic<T>.Update));

@@ -7,7 +7,6 @@ namespace NHSD.GPITF.BuyingCatalog.Interfaces
   public interface ITechnicalContactsLogic
   {
     IEnumerable<TechnicalContacts> BySolution(string solutionId);
-    TechnicalContacts Create(TechnicalContacts techCont);
     void Update(TechnicalContacts techCont);
     void Delete(TechnicalContacts techCont);
   }

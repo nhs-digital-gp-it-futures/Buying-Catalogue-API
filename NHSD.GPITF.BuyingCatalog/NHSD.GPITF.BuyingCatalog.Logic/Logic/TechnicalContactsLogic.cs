@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
 using System.Collections.Generic;
@@ -27,12 +26,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
     public IEnumerable<TechnicalContacts> BySolution(string solutionId)
     {
       return _filter.Filter(_datastore.BySolution(solutionId));
-    }
-
-    public TechnicalContacts Create(TechnicalContacts techCont)
-    {
-      _validator.ValidateAndThrowEx(techCont, ruleSet: nameof(ITechnicalContactsLogic.Create));
-      return _datastore.Create(techCont);
     }
 
     public void Delete(TechnicalContacts techCont)

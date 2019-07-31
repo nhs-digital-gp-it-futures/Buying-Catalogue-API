@@ -67,21 +67,6 @@ where Id in @ids
       });
     }
 
-    public Standards Create(Standards standard)
-    {
-      return GetInternal(() =>
-      {
-        using (var trans = _dbConnection.BeginTransaction())
-        {
-          standard.Id = UpdateId(standard.Id);
-          _dbConnection.Insert(standard, trans);
-          trans.Commit();
-
-          return standard;
-        }
-      });
-    }
-
     public IEnumerable<Standards> GetAll()
     {
       return GetInternal(() =>

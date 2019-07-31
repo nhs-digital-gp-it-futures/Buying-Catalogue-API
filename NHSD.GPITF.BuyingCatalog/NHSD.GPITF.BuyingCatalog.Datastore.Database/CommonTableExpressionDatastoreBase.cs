@@ -96,20 +96,5 @@ select cte.* from {tableName} cte where {nameof(IHasPreviousId.Id)} not in
         return _dbConnection.Get<T>(id);
       });
     }
-
-    public T Create(T review)
-    {
-      return GetInternal(() =>
-      {
-        using (var trans = _dbConnection.BeginTransaction())
-        {
-          review.Id = UpdateId(review.Id);
-          _dbConnection.Insert(review, trans);
-          trans.Commit();
-
-          return review;
-        }
-      });
-    }
   }
 }

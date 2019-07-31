@@ -98,36 +98,6 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     }
 
     /// <summary>
-    /// Create a new solution for an organisation
-    /// </summary>
-    /// <param name="solution">new solution information</param>
-    /// <response code="200">Success</response>
-    /// <response code="404">Organisation not found in CRM</response>
-    /// <response code="500">Validation exception</response>
-    [HttpPost]
-    [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(Solutions), description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Organisation not found in CRM")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.InternalServerError, description: "Validation exception")]
-    [SwaggerRequestExample(typeof(Solutions), typeof(SolutionsExample), jsonConverter: typeof(StringEnumConverter))]
-    public IActionResult Create([FromBody]Solutions solution)
-    {
-      try
-      {
-        var newSolution = _logic.Create(solution);
-        return new OkObjectResult(newSolution);
-      }
-      catch (FluentValidation.ValidationException ex)
-      {
-        return new InternalServerErrorObjectResult(ex);
-      }
-      catch (Exception ex)
-      {
-        return new NotFoundObjectResult(ex);
-      }
-    }
-
-    /// <summary>
     /// Update an existing solution with new information
     /// </summary>
     /// <param name="solution">solution with updated information</param>

@@ -8,7 +8,6 @@ namespace NHSD.GPITF.BuyingCatalog.Interfaces
   {
     T ById(string id);
     IEnumerable<T> BySolution(string solutionId);
-    T Create(T claim);
     void Update(T claim);
     void Delete(T claim);
   }

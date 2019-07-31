@@ -18,13 +18,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       _contacts = contacts;
     }
 
-    public void ForCreate(Solutions input)
-    {
-      var email = _context.Email();
-      input.CreatedById = input.ModifiedById = _contacts.ByEmail(email).Id;
-      input.CreatedOn = input.ModifiedOn = DateTime.UtcNow;
-    }
-
     public void ForUpdate(Solutions input)
     {
       var email = _context.Email();

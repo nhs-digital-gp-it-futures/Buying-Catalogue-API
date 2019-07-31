@@ -54,22 +54,6 @@ select * from Solutions where Id not in
       });
     }
 
-    public Solutions Create(Solutions solution)
-    {
-      return GetInternal(() =>
-      {
-        using (var trans = _dbConnection.BeginTransaction())
-        {
-          solution.Id = UpdateId(solution.Id);
-          solution.CreatedOn = solution.ModifiedOn = DateTime.UtcNow;
-          _dbConnection.Insert(solution, trans);
-          trans.Commit();
-
-          return solution;
-        }
-      });
-    }
-
     public void Update(Solutions solution)
     {
       GetInternal(() =>

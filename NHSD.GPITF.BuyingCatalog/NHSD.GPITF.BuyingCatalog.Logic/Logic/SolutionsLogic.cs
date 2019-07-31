@@ -45,15 +45,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       return _filter.Filter(_datastore.ByOrganisation(organisationId));
     }
 
-    public Solutions Create(Solutions solution)
-    {
-      _validator.ValidateAndThrowEx(solution, ruleSet: nameof(ISolutionsLogic.Create));
-
-      _modifier.ForCreate(solution);
-
-      return _datastore.Create(solution);
-    }
-
     public void Update(Solutions solution)
     {
       _validator.ValidateAndThrowEx(solution, ruleSet: nameof(ISolutionsLogic.Update));

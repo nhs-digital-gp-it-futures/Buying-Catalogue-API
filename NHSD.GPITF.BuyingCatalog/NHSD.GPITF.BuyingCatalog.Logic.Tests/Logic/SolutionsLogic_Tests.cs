@@ -70,24 +70,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void Create_CallsValidator_WithRuleset()
-    {
-      var logic = Create();
-      var soln = Creator.GetSolution();
-      _context.Setup(x => x.HttpContext).Returns(Creator.GetContext());
-      _contacts.Setup(x => x.ByEmail(It.IsAny<string>())).Returns(Creator.GetContact());
-
-      var valres = new ValidationResult();
-      _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
-
-      logic.Create(soln);
-
-      _validator.Verify(x => x.ValidateAndThrowEx(
-        It.Is<Solutions>(s => s == soln),
-        It.Is<string>(rs => rs == nameof(ISolutionsLogic.Create))), Times.Once());
-    }
-
-    [Test]
     public void Update_CallsValidator_WithRuleset()
     {
       var logic = Create();
@@ -103,20 +85,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       _validator.Verify(x => x.ValidateAndThrowEx(
         It.Is<Solutions>(s => s == soln),
         It.Is<string>(rs => rs == nameof(ISolutionsLogic.Update))), Times.Once());
-    }
-
-    [Test]
-    public void Create_Calls_Modifier()
-    {
-      var logic = Create();
-      var soln = Creator.GetSolution();
-
-      var valres = new ValidationResult();
-      _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
-
-      logic.Create(soln);
-
-      _modifier.Verify(x => x.ForCreate(soln), Times.Once);
     }
 
     [Test]

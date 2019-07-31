@@ -60,30 +60,6 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     }
 
     /// <summary>
-    /// Create a new Technical Contact for a Solution
-    /// </summary>
-    /// <param name="techCont">new Technical Contact information</param>
-    /// <response code="200">Success</response>
-    /// <response code="404">Solution not found in CRM</response>
-    [HttpPost]
-    [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(TechnicalContacts), description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Solution not found in CRM")]
-    [SwaggerRequestExample(typeof(TechnicalContacts), typeof(TechnicalContactsExample), jsonConverter: typeof(StringEnumConverter))]
-    public IActionResult Create([FromBody]TechnicalContacts techCont)
-    {
-      try
-      {
-        var newTechCont = _logic.Create(techCont);
-        return new OkObjectResult(newTechCont);
-      }
-      catch (Exception ex)
-      {
-        return new NotFoundObjectResult(ex);
-      }
-    }
-
-    /// <summary>
     /// Update a Technical Contact with new information
     /// </summary>
     /// <param name="techCont">Technical Contact with updated information</param>

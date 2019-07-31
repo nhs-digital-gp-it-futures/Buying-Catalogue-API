@@ -23,21 +23,6 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
       });
     }
 
-    public TechnicalContacts Create(TechnicalContacts techCont)
-    {
-      return GetInternal(() =>
-      {
-        using (var trans = _dbConnection.BeginTransaction())
-        {
-          techCont.Id = UpdateId(techCont.Id);
-          _dbConnection.Insert(techCont, trans);
-          trans.Commit();
-
-          return techCont;
-        }
-      });
-    }
-
     public void Update(TechnicalContacts techCont)
     {
       GetInternal(() =>

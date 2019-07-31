@@ -38,35 +38,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void Create_CallsValidator_WithRuleset()
-    {
-      var logic = new DummyClaimsLogicBase(_modifier.Object, _datastore.Object, _validator.Object, _filter.Object, _context.Object);
-      var claim = Creator.GetClaimsBase();
-
-      var valres = new ValidationResult();
-      _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
-
-      logic.Create(claim);
-
-      _validator.Verify(x => x.ValidateAndThrowEx(
-        It.Is<ClaimsBase>(c => c == claim),
-        It.Is<string>(rs => rs == nameof(IClaimsLogic<ClaimsBase>.Create))), Times.Once());
-    }
-
-    [Test]
-    public void Create_Calls_Modifier()
-    {
-      var logic = new DummyClaimsLogicBase(_modifier.Object, _datastore.Object, _validator.Object, _filter.Object, _context.Object);
-      var claim = Creator.GetClaimsBase(originalDate: DateTime.MinValue);
-      var valres = new ValidationResult();
-      _validator.Setup(x => x.Validate(It.IsAny<ValidationContext>())).Returns(valres);
-
-      logic.Create(claim);
-
-      _modifier.Verify(x => x.ForCreate(claim), Times.Once);
-    }
-
-    [Test]
     public void Update_CallsValidator_WithRuleset()
     {
       var logic = new DummyClaimsLogicBase(_modifier.Object, _datastore.Object, _validator.Object, _filter.Object, _context.Object);

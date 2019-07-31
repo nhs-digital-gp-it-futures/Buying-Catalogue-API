@@ -34,21 +34,6 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
       });
     }
 
-    public T Create(T claimedcapability)
-    {
-      return GetInternal(() =>
-      {
-        using (var trans = _dbConnection.BeginTransaction())
-        {
-          claimedcapability.Id = UpdateId(claimedcapability.Id);
-          _dbConnection.Insert(claimedcapability, trans);
-          trans.Commit();
-
-          return claimedcapability;
-        }
-      });
-    }
-
     public void Update(T claimedcapability)
     {
       GetInternal(() =>
@@ -83,11 +68,6 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database
     IEnumerable<ClaimsBase> IClaimsDatastore<ClaimsBase>.BySolution(string solutionId)
     {
       return BySolution(solutionId);
-    }
-
-    ClaimsBase IClaimsDatastore<ClaimsBase>.Create(ClaimsBase claim)
-    {
-      return Create((T)claim);
     }
 
     void IClaimsDatastore<ClaimsBase>.Update(ClaimsBase claim)

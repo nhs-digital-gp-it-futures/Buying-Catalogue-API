@@ -41,14 +41,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         MustBePendingToChangeVersion();
       });
 
-      RuleSet(nameof(ISolutionsLogic.Create), () =>
-      {
-        MustBeValidOrganisationId();
-        MustBeFromSameOrganisationOrAdmin();
-        PreviousVersionMustBeFromSameOrganisation();
-        MustBePending();
-      });
-
       RuleSet(nameof(ISolutionsLogic.Delete), () =>
       {
         MustBeDevelopment();

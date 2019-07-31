@@ -15,17 +15,6 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void ForCreate_SetsOriginalDate_ToUtcNow()
-    {
-      var modifier = new DummyClaimsBaseModifier();
-      var claim = Creator.GetClaimsBase(originalDate: DateTime.MinValue);
-
-      modifier.ForCreate(claim);
-
-      claim.OriginalDate.Should().BeCloseTo(DateTime.UtcNow);
-    }
-
-    [Test]
     public void ForUpdate_DefaultOriginalDate_SetsOriginalDate_ToUtcNow()
     {
       var modifier = new DummyClaimsBaseModifier();
