@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Autofac.Configuration;
 using Autofac.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -147,27 +146,6 @@ namespace NHSD.GPITF.BuyingCatalog
             };
           });
 
-      services
-        .AddAuthentication(options =>
-        {
-          options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-          options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        })
-        .AddJwtBearer(options =>
-        {
-          options.Authority = Settings.OIDC_ISSUER_URL(Configuration);
-          options.Audience = Settings.OIDC_AUDIENCE(Configuration);
-          options.RequireHttpsMetadata = !CurrentEnvironment.IsDevelopment();
-          options.Events = new JwtBearerEvents
-          {
-            OnTokenValidated = async context =>
-            {
-              var auth = ServiceProvider.GetService<IBearerAuthentication>();
-              await auth.Authenticate(context);
-            }
-          };
-        });
-
       // Create the container builder.
       var builder = new ContainerBuilder();
 
@@ -277,12 +255,6 @@ namespace NHSD.GPITF.BuyingCatalog
 
       Console.WriteLine($"  LOG:");
       Console.WriteLine($"    LOG_CONNECTIONSTRING : {Settings.LOG_CONNECTIONSTRING(Configuration)}");
-      Console.WriteLine($"    LOG_BEARERAUTH       : {Settings.LOG_BEARERAUTH(Configuration)}");
-
-      Console.WriteLine($"  OIDC:");
-      Console.WriteLine($"    OIDC_USERINFO_URL : {Settings.OIDC_USERINFO_URL(Configuration)}");
-      Console.WriteLine($"    OIDC_ISSUER_URL   : {Settings.OIDC_ISSUER_URL(Configuration)}");
-      Console.WriteLine($"    OIDC_AUDIENCE     : {Settings.OIDC_AUDIENCE(Configuration)}");
     }
   }
 }

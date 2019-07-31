@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NHSD.GPITF.BuyingCatalog.Attributes;
 using NHSD.GPITF.BuyingCatalog.Interfaces.Porcelain;
@@ -18,7 +17,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers.Porcelain
   [Route("api/porcelain/[controller]")]
   [Authorize(
     Roles = Roles.Admin + "," + Roles.Buyer + "," + Roles.Supplier,
-    AuthenticationSchemes = BasicAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme)]
+    AuthenticationSchemes = BasicAuthenticationDefaults.AuthenticationScheme)]
   [Produces("application/json")]
   public sealed class CapabilityMappingsController : Controller
   {

@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -19,7 +18,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
   [Route("api/[controller]")]
   [Authorize(
     Roles = Roles.Admin + "," + Roles.Buyer + "," + Roles.Supplier,
-    AuthenticationSchemes = BasicAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme)]
+    AuthenticationSchemes = BasicAuthenticationDefaults.AuthenticationScheme)]
   [Produces("application/json")]
   public sealed class OrganisationsController : Controller
   {

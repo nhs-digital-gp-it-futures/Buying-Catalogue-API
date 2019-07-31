@@ -1,9 +1,5 @@
 ﻿using IdentityModel.Client;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http;
-using Microsoft.Extensions.Primitives;
 using NHSD.GPITF.BuyingCatalog.Authentications;
 using NHSD.GPITF.BuyingCatalog.Logic;
 using NHSD.GPITF.BuyingCatalog.Models;
@@ -17,25 +13,6 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
 {
   public static class Creator
   {
-    public static TokenValidatedContext GetTokenValidatedContext(string bearerToken)
-    {
-      var authScheme = new AuthenticationScheme("BearerAuthentication", "BearerAuthentication", typeof(DummyAuthenticationHandler));
-      var options = new JwtBearerOptions();
-      var ctx = new TokenValidatedContext(Creator.GetContext(bearerToken), authScheme, options)
-      {
-        Principal = new ClaimsPrincipal()
-      };
-
-      return ctx;
-    }
-
-    public static DummyHttpContext GetContext(string bearerToken)
-    {
-      var ctx = new DummyHttpContext();
-      ((FrameRequestHeaders)ctx.Request.Headers).HeaderAuthorization = new StringValues(bearerToken);
-      return ctx;
-    }
-
     public static DefaultHttpContext GetContext(
       string orgId = "NHS Digital",
       string role = Roles.Admin,

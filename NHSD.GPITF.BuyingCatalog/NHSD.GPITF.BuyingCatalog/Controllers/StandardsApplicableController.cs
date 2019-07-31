@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -11,7 +10,6 @@ using Swashbuckle.AspNetCore.Examples;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Net;
 using ZNetCS.AspNetCore.Authentication.Basic;
 
@@ -24,7 +22,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
   [Route("api/[controller]")]
   [Authorize(
     Roles = Roles.Admin + "," + Roles.Buyer + "," + Roles.Supplier,
-    AuthenticationSchemes = BasicAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme)]
+    AuthenticationSchemes = BasicAuthenticationDefaults.AuthenticationScheme)]
   [Produces("application/json")]
   public sealed class StandardsApplicableController : Controller
   {
