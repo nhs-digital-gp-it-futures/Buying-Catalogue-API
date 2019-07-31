@@ -45,6 +45,22 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
       res.Should().BeEquivalentTo(techConts);
     }
 
+    public void Filter_None_Returns_All()
+    {
+      var ctx = Creator.GetContext(role: "None");
+      _context.Setup(c => c.HttpContext).Returns(ctx);
+      var filter = new TechnicalContactsFilter(_context.Object, _solutionDatastore.Object);
+      var techConts = new[]
+      {
+        Creator.GetTechnicalContact(),
+        Creator.GetTechnicalContact(),
+        Creator.GetTechnicalContact()
+      };
+      var res = filter.Filter(techConts);
+
+      res.Should().BeEquivalentTo(techConts);
+    }
+
     [Test]
     public void Filter_Supplier_Returns_Own()
     {

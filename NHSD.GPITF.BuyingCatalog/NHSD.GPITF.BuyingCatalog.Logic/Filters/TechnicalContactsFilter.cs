@@ -24,9 +24,15 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
         return input;
       }
 
-      // Supplier: only own TechnicalContacts
-      var soln = _solutionDatastore.ById(input.SolutionId);
-      return _context.OrganisationId() == soln.OrganisationId ? input : null;
+      if (_context.HasRole(Roles.Supplier))
+      {
+        // Supplier: only own TechnicalContacts
+        var soln = _solutionDatastore.ById(input.SolutionId);
+        return _context.OrganisationId() == soln.OrganisationId ? input : null;
+      }
+
+      // None
+      return input;
     }
   }
 }
