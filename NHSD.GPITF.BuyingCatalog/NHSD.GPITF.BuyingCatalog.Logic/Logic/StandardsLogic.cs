@@ -9,41 +9,38 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
   public sealed class StandardsLogic : LogicBase, IStandardsLogic
   {
     private readonly IStandardsDatastore _datastore;
-    private readonly IStandardsFilter _filter;
 
     public StandardsLogic(
       IStandardsDatastore datastore,
-      IHttpContextAccessor context,
-      IStandardsFilter filter) :
+      IHttpContextAccessor context) :
       base(context)
     {
       _datastore = datastore;
-      _filter = filter;
     }
 
     public IEnumerable<Standards> ByCapability(string capabilityId, bool isOptional)
     {
-      return _filter.Filter(_datastore.ByCapability(capabilityId, isOptional));
+      return _datastore.ByCapability(capabilityId, isOptional);
     }
 
     public IEnumerable<Standards> ByFramework(string frameworkId)
     {
-      return _filter.Filter(_datastore.ByFramework(frameworkId));
+      return _datastore.ByFramework(frameworkId);
     }
 
     public Standards ById(string id)
     {
-      return _filter.Filter(new[] { _datastore.ById(id) }).SingleOrDefault();
+      return (new[] { _datastore.ById(id) }).SingleOrDefault();
     }
 
     public IEnumerable<Standards> ByIds(IEnumerable<string> ids)
     {
-      return _filter.Filter(_datastore.ByIds(ids));
+      return _datastore.ByIds(ids);
     }
 
     public IEnumerable<Standards> GetAll()
     {
-      return _filter.Filter(_datastore.GetAll());
+      return _datastore.GetAll();
     }
   }
 }
