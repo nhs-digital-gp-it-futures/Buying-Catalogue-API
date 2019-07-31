@@ -1,6 +1,5 @@
 ﻿using IdentityModel.Client;
 using Microsoft.AspNetCore.Http;
-using NHSD.GPITF.BuyingCatalog.Authentications;
 using NHSD.GPITF.BuyingCatalog.Logic;
 using NHSD.GPITF.BuyingCatalog.Models;
 using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
