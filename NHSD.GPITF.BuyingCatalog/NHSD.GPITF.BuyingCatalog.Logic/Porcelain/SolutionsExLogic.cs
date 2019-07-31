@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces.Porcelain;
 using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
 using System.Collections.Generic;
@@ -10,22 +9,16 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
   public sealed class SolutionsExLogic : LogicBase, ISolutionsExLogic
   {
     private readonly ISolutionsExDatastore _datastore;
-    private readonly ISolutionsExValidator _validator;
     private readonly ISolutionsExFilter _filter;
-    private readonly IContactsDatastore _contacts;
 
     public SolutionsExLogic(
       ISolutionsExDatastore datastore,
       IHttpContextAccessor context,
-      ISolutionsExValidator validator,
-      ISolutionsExFilter filter,
-      IContactsDatastore contacts) :
+      ISolutionsExFilter filter) :
       base(context)
     {
       _datastore = datastore;
-      _validator = validator;
       _filter = filter;
-      _contacts = contacts;
     }
 
     public SolutionEx BySolution(string solutionId)

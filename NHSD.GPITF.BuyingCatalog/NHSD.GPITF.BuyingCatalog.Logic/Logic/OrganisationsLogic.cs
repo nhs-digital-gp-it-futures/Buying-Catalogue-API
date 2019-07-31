@@ -8,19 +8,16 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
   public sealed class OrganisationsLogic : LogicBase, IOrganisationsLogic
   {
     private readonly IOrganisationsDatastore _datastore;
-    private readonly IOrganisationsValidator _validator;
     private readonly IOrganisationsFilter _filter;
 
     public OrganisationsLogic(
       IOrganisationsDatastore datastore,
       IHttpContextAccessor context,
-      IOrganisationsValidator validator,
       IOrganisationsFilter filter
       ) :
       base(context)
     {
       _datastore = datastore;
-      _validator = validator;
       _filter = filter;
     }
 
