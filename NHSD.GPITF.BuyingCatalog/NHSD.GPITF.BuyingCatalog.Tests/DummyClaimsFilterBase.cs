@@ -9,8 +9,9 @@ namespace NHSD.GPITF.BuyingCatalog.Tests
   {
     public DummyClaimsFilterBase(
       IHttpContextAccessor context,
-      ISolutionsDatastore solutionDatastore) :
-      base(context, solutionDatastore)
+      ISolutionsDatastore solutionDatastore,
+      ISolutionsFilter solutionsFilter) :
+      base(context, solutionDatastore, solutionsFilter)
     {
     }
   }

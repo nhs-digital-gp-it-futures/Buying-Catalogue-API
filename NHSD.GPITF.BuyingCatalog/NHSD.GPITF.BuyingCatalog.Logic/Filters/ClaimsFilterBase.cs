@@ -1,19 +1,23 @@
 ﻿using Microsoft.AspNetCore.Http;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
+using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic
 {
   public abstract class ClaimsFilterBase<T> : FilterBase<T>, IClaimsFilter<T> where T : ClaimsBase
   {
     private readonly ISolutionsDatastore _solutionDatastore;
+    private readonly ISolutionsFilter _solutionsFilter;
 
     protected ClaimsFilterBase(
       IHttpContextAccessor context,
-      ISolutionsDatastore solutionDatastore) :
+      ISolutionsDatastore solutionDatastore,
+      ISolutionsFilter solutionsFilter) :
       base(context)
     {
       _solutionDatastore = solutionDatastore;
+      _solutionsFilter = solutionsFilter;
     }
 
     protected virtual T FilterSpecific(T input)
@@ -27,15 +31,17 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       {
         input = FilterForAdmin(input);
       }
-
-      if (_context.HasRole(Roles.Buyer))
+      else if (_context.HasRole(Roles.Buyer))
       {
         input = FilterForBuyer(input);
       }
-
-      if (_context.HasRole(Roles.Supplier))
+      else if (_context.HasRole(Roles.Supplier))
       {
         input = FilterForSupplier(input);
+      }
+      else
+      {
+        input = FilterForNone(input);
       }
 
       return FilterSpecific(input);
@@ -49,7 +55,13 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
     public T FilterForBuyer(T input)
     {
-      // Buyer: everything
+      // Buyer: hide draft & failed Solutions
+      var buyerSoln = _solutionsFilter.Filter(new[] { _solutionDatastore.ById(input.SolutionId) }).SingleOrDefault();
+      if (buyerSoln == null)
+      {
+        return null;
+      }
+
       return input;
     }
 
@@ -58,6 +70,18 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
       // Supplier: only own Claims
       var soln = _solutionDatastore.ById(input.SolutionId);
       return _context.OrganisationId() == soln?.OrganisationId ? input : null;
+    }
+
+    public T FilterForNone(T input)
+    {
+      // None:  only approved solutions
+      var noneSoln = _solutionsFilter.Filter(new[] { _solutionDatastore.ById(input.SolutionId) }).SingleOrDefault();
+      if (noneSoln == null)
+      {
+        return null;
+      }
+
+      return input;
     }
   }
 }

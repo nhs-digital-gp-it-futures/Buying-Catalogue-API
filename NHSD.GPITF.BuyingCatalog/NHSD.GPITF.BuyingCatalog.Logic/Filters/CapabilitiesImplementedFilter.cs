@@ -8,8 +8,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
   {
     public CapabilitiesImplementedFilter(
       IHttpContextAccessor context,
-      ISolutionsDatastore solutionDatastore) :
-      base(context, solutionDatastore)
+      ISolutionsDatastore solutionDatastore,
+      ISolutionsFilter solutionsFilter) :
+      base(context, solutionDatastore, solutionsFilter)
     {
     }
   }
