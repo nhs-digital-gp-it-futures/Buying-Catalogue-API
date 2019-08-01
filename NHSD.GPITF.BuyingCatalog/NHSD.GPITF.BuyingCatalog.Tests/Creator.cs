@@ -1,42 +1,13 @@
-﻿using IdentityModel.Client;
-using Microsoft.AspNetCore.Http;
-using NHSD.GPITF.BuyingCatalog.Logic;
+﻿using NHSD.GPITF.BuyingCatalog.Logic;
 using NHSD.GPITF.BuyingCatalog.Models;
 using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
 
 namespace NHSD.GPITF.BuyingCatalog.Tests
 {
   public static class Creator
   {
-    public static DefaultHttpContext GetContext(
-      string orgId = "NHS Digital",
-      string role = Roles.Admin,
-      string email = "NHS-GPIT@WigglyAmps.com")
-    {
-      var orgClaim = new Claim(nameof(Organisations), orgId);
-      var roleClaim = new Claim(ClaimTypes.Role, role);
-      var emailClaim = new Claim(ClaimTypes.Email, email);
-      var claimsIdentity = new ClaimsIdentity(new[] { orgClaim, roleClaim, emailClaim });
-      var user = new ClaimsPrincipal(new[] { claimsIdentity });
-      var ctx = new DefaultHttpContext { User = user };
-
-      return ctx;
-    }
-
-    public static UserInfoResponse GetUserInfoResponse(
-      IEnumerable<(string Type, string Value)> claims
-      )
-    {
-      var jsonClaimsArray = claims.Select(c => $"{c.Type}:\"{c.Value}\"");
-      var jsonClaims = "{" + string.Join(',', jsonClaimsArray) + "}";
-      var response = new UserInfoResponse(jsonClaims);
-      return response;
-    }
-
     public static Frameworks GetFramework(
       string id = null)
     {

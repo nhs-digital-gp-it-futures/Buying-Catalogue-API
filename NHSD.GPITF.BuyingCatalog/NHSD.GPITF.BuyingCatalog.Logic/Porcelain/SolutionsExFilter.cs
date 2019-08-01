@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
+﻿using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
 {
@@ -8,9 +7,8 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Porcelain
     private readonly ISolutionsFilter _solutionsFilter;
 
     public SolutionsExFilter(
-      IHttpContextAccessor context,
       ISolutionsFilter solutionsFilter) :
-      base(context)
+      base()
     {
       _solutionsFilter = solutionsFilter;
     }
