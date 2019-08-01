@@ -2,15 +2,19 @@
 
 This is public repository for _Buying Catalogue API_ development during _Public Browse_ stage of GP IT Futures.
 
-## Setup
+## Getting Started
 
-For a brief guide for how to get started developing the API
+### Development Environment
+1. Visual Studio 2017 Community Edition (or higher)
+1. .NET Core v2.1 SDK (or higher)
+1. database connection:
+  * Microsoft SQL Server 2017 (or higher)
+  * database creation scripts for other databases are provided
+  * databases other than Microsoft SQL Server are not tested and may work (!)
 
-## Environment Variables
+### Environment Variables
 
 There are several environment variables used by the system, mainly for database connection.
-
-### Buying Catalogue API
 
 Variable | Usage | Example Value
 ---------|-------|--------------
@@ -20,7 +24,7 @@ DATASTORE_CONNECTIONTYPE | Type of database for datastore | `SQLite` or `SqlServ
 DATASTORE_CONNECTIONSTRING | .NET database connection string for database datastore | `Data Source=docker.for.win.localhost;Initial Catalog=BuyingCatalog;User Id=BuyingCatalog;Password=ABCDEFG1234567;`
 LOG_CONNECTIONSTRING | .NET database connection string for nLog database target | `Data Source=docker.for.win.localhost;Initial Catalog=BuyingCatalog;User Id=BuyingCatalog;Password=ABCDEFG1234567;`
 
-#### Notes
+### Notes
 * enable `Development` mode by setting env var:  
 &nbsp;&nbsp;&nbsp;&nbsp;  `ASPNETCORE_ENVIRONMENT`=`Development`
 * SwaggerUI is only enabled in `Development` mode
