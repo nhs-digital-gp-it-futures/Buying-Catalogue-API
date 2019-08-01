@@ -26,7 +26,7 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
       if (_context.HasRole(Roles.Admin))
       {
-        // Admin:  everything
+        // Admin: everything
         return input;
       }
 
