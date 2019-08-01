@@ -1,37 +1,32 @@
-﻿using Microsoft.AspNetCore.Http;
-using NHSD.GPITF.BuyingCatalog.Interfaces;
+﻿using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
+using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic
 {
   public sealed class TechnicalContactsFilter : FilterBase<TechnicalContacts>, ITechnicalContactsFilter
   {
     private readonly ISolutionsDatastore _solutionDatastore;
+    private readonly ISolutionsFilter _solutionsFilter;
 
     public TechnicalContactsFilter(
-      IHttpContextAccessor context,
-      ISolutionsDatastore solutionDatastore) :
-      base(context)
+      ISolutionsDatastore solutionDatastore,
+      ISolutionsFilter solutionsFilter) :
+      base()
     {
       _solutionDatastore = solutionDatastore;
+      _solutionsFilter = solutionsFilter;
     }
 
     public override TechnicalContacts Filter(TechnicalContacts input)
     {
-      if (_context.HasRole(Roles.Admin) ||
-        _context.HasRole(Roles.Buyer))
+      // None:  only approved solutions
+      var noneSoln = _solutionsFilter.Filter(new[] { _solutionDatastore.ById(input.SolutionId) }).SingleOrDefault();
+      if (noneSoln == null)
       {
-        return input;
+        return null;
       }
 
-      if (_context.HasRole(Roles.Supplier))
-      {
-        // Supplier: only own TechnicalContacts
-        var soln = _solutionDatastore.ById(input.SolutionId);
-        return _context.OrganisationId() == soln.OrganisationId ? input : null;
-      }
-
-      // None
       return input;
     }
   }

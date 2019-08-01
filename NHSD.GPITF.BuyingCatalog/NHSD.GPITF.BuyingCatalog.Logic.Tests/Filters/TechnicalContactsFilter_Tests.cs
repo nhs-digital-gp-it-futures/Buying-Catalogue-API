@@ -2,86 +2,62 @@
 using Microsoft.AspNetCore.Http;
 using Moq;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
+using NHSD.GPITF.BuyingCatalog.Models;
 using NHSD.GPITF.BuyingCatalog.Tests;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
 {
   [TestFixture]
   public sealed class TechnicalContactsFilter_Tests
   {
-    private Mock<IHttpContextAccessor> _context;
     private Mock<ISolutionsDatastore> _solutionDatastore;
+    private Mock<ISolutionsFilter> _solutionsFilter;
 
     [SetUp]
     public void SetUp()
     {
-      _context = new Mock<IHttpContextAccessor>();
       _solutionDatastore = new Mock<ISolutionsDatastore>();
+      _solutionsFilter = new Mock<ISolutionsFilter>();
     }
 
     [Test]
     public void Constructor_Completes()
     {
-      Assert.DoesNotThrow(() => new TechnicalContactsFilter(_context.Object, _solutionDatastore.Object));
-    }
-
-    [TestCase(Roles.Admin)]
-    [TestCase(Roles.Buyer)]
-    public void Filter_NonSupplier_Returns_All(string role)
-    {
-      var ctx = Creator.GetContext(role: role);
-      _context.Setup(c => c.HttpContext).Returns(ctx);
-      var filter = new TechnicalContactsFilter(_context.Object, _solutionDatastore.Object);
-      var techConts = new[]
-      {
-        Creator.GetTechnicalContact(),
-        Creator.GetTechnicalContact(),
-        Creator.GetTechnicalContact()
-      };
-      var res = filter.Filter(techConts);
-
-      res.Should().BeEquivalentTo(techConts);
-    }
-
-    public void Filter_None_Returns_All()
-    {
-      var ctx = Creator.GetContext(role: "None");
-      _context.Setup(c => c.HttpContext).Returns(ctx);
-      var filter = new TechnicalContactsFilter(_context.Object, _solutionDatastore.Object);
-      var techConts = new[]
-      {
-        Creator.GetTechnicalContact(),
-        Creator.GetTechnicalContact(),
-        Creator.GetTechnicalContact()
-      };
-      var res = filter.Filter(techConts);
-
-      res.Should().BeEquivalentTo(techConts);
+      Assert.DoesNotThrow(() => Create());
     }
 
     [Test]
-    public void Filter_Supplier_Returns_Own()
+    public void Filter_None_Returns_Approved(
+      [ValueSource(typeof(Creator), nameof(Creator.SolutionStatuses))]SolutionStatus status)
     {
-      var orgId = Guid.NewGuid().ToString();
-      var ctx = Creator.GetContext(orgId: orgId, role: Roles.Supplier);
-      _context.Setup(c => c.HttpContext).Returns(ctx);
-      var filter = new TechnicalContactsFilter(_context.Object, _solutionDatastore.Object);
-      var soln1 = Creator.GetSolution(orgId: orgId);
-      var soln2 = Creator.GetSolution();
-      var soln3 = Creator.GetSolution();
-      _solutionDatastore.Setup(x => x.ById(soln1.Id)).Returns(soln1);
-      _solutionDatastore.Setup(x => x.ById(soln2.Id)).Returns(soln2);
-      _solutionDatastore.Setup(x => x.ById(soln3.Id)).Returns(soln3);
-      var techContCtx1 = Creator.GetTechnicalContact(solutionId: soln1.Id);
-      var techContCtx2 = Creator.GetTechnicalContact(solutionId: soln2.Id);
-      var techContCtx3 = Creator.GetTechnicalContact(solutionId: soln3.Id);
-      var techContCtxs = new[] { techContCtx1, techContCtx2, techContCtx3 };
+      var filter = Create();
+      var soln = Creator.GetSolution(status: status);
+      _solutionDatastore.Setup(x => x.ById(soln.Id)).Returns(soln);
+      _solutionsFilter
+        .Setup(x => x.Filter(It.Is<IEnumerable<Solutions>>(solns => solns.Contains(soln))))
+        .Returns(soln.Status == SolutionStatus.Approved ? new[] { soln } : Enumerable.Empty<Solutions>());
+      var techConts = new[]
+      {
+        Creator.GetTechnicalContact(solutionId: soln.Id),
+        Creator.GetTechnicalContact(solutionId: soln.Id),
+        Creator.GetTechnicalContact(solutionId: soln.Id)
+      };
+      var expTechConts = techConts.Where(x => soln.Status == SolutionStatus.Approved);
 
-      var res = filter.Filter(techContCtxs);
+      var res = filter.Filter(techConts);
 
-      res.Should().BeEquivalentTo(new[] { techContCtx1 });
+      res.Should().BeEquivalentTo(expTechConts);
+    }
+
+    private TechnicalContactsFilter Create()
+    {
+      return new TechnicalContactsFilter(
+        _solutionDatastore.Object,
+        _solutionsFilter.Object);
     }
   }
 }

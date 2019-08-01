@@ -342,5 +342,6 @@ NHSD.GPITF.BuyingCatalog/NHSD.GPITF.BuyingCatalog/Logs
 *.sqlite3
 !NHSD.GPITF.BuyingCatalog/NHSD.GPITF.BuyingCatalog.Meta
 NHSD.GPITF.BuyingCatalog/NHSD.GPITF.BuyingCatalog/Properties/launchSettings.json
+Documentation/
 .scannerwork
 .sonarqube

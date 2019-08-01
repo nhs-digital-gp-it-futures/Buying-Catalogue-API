@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Moq;
+﻿using Moq;
 using NHSD.GPITF.BuyingCatalog.Logic.Porcelain;
 using NHSD.GPITF.BuyingCatalog.Models;
 using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
@@ -12,26 +11,24 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests.Porcelain
   [TestFixture]
   public sealed class SolutionsExFilter_Tests
   {
-    private Mock<IHttpContextAccessor> _context;
     private Mock<ISolutionsFilter> _solnFilter;
 
     [SetUp]
     public void SetUp()
     {
-      _context = new Mock<IHttpContextAccessor>();
       _solnFilter = new Mock<ISolutionsFilter>();
     }
 
     [Test]
     public void Constructor_Completes()
     {
-      Assert.DoesNotThrow(() => new SolutionsExFilter(_context.Object, _solnFilter.Object));
+      Assert.DoesNotThrow(() => new SolutionsExFilter(_solnFilter.Object));
     }
 
     [Test]
     public void Filter_Null_CallsSolutionsFilterWithNull()
     {
-      var filter = new SolutionsExFilter(_context.Object, _solnFilter.Object);
+      var filter = new SolutionsExFilter(_solnFilter.Object);
 
       filter.Filter((SolutionEx)null);
 

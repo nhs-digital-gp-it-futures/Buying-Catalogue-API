@@ -1,19 +1,21 @@
-﻿using Microsoft.AspNetCore.Http;
-using NHSD.GPITF.BuyingCatalog.Interfaces;
+﻿using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
+using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Logic
 {
   public abstract class ClaimsFilterBase<T> : FilterBase<T>, IClaimsFilter<T> where T : ClaimsBase
   {
     private readonly ISolutionsDatastore _solutionDatastore;
+    private readonly ISolutionsFilter _solutionsFilter;
 
     protected ClaimsFilterBase(
-      IHttpContextAccessor context,
-      ISolutionsDatastore solutionDatastore) :
-      base(context)
+      ISolutionsDatastore solutionDatastore,
+      ISolutionsFilter solutionsFilter) :
+      base()
     {
       _solutionDatastore = solutionDatastore;
+      _solutionsFilter = solutionsFilter;
     }
 
     protected virtual T FilterSpecific(T input)
@@ -23,41 +25,21 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
     public override T Filter(T input)
     {
-      if (_context.HasRole(Roles.Admin))
-      {
-        input = FilterForAdmin(input);
-      }
-
-      if (_context.HasRole(Roles.Buyer))
-      {
-        input = FilterForBuyer(input);
-      }
-
-      if (_context.HasRole(Roles.Supplier))
-      {
-        input = FilterForSupplier(input);
-      }
+      input = FilterForNone(input);
 
       return FilterSpecific(input);
     }
 
-    public T FilterForAdmin(T input)
+    public T FilterForNone(T input)
     {
-      // Admin: everything
-      return input;
-    }
+      // None:  only approved solutions
+      var noneSoln = _solutionsFilter.Filter(new[] { _solutionDatastore.ById(input.SolutionId) }).SingleOrDefault();
+      if (noneSoln == null)
+      {
+        return null;
+      }
 
-    public T FilterForBuyer(T input)
-    {
-      // Buyer: everything
       return input;
-    }
-
-    public T FilterForSupplier(T input)
-    {
-      // Supplier: only own Claims
-      var soln = _solutionDatastore.ById(input.SolutionId);
-      return _context.OrganisationId() == soln?.OrganisationId ? input : null;
     }
   }
 }
