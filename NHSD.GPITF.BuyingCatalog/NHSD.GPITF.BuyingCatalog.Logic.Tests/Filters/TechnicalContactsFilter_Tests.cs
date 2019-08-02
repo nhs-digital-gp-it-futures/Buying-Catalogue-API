@@ -31,26 +31,49 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void Filter_None_Returns_Approved(
-      [ValueSource(typeof(Creator), nameof(Creator.SolutionStatuses))]SolutionStatus status)
+    public void Filter_None_Returns_Filtered_By_SolutionFilter(
+      [Values(true, false)]bool returnSoln)
     {
       var filter = Create();
-      var soln = Creator.GetSolution(status: status);
+      var soln = Creator.GetSolution();
       _solutionDatastore.Setup(x => x.ById(soln.Id)).Returns(soln);
       _solutionsFilter
         .Setup(x => x.Filter(It.Is<IEnumerable<Solutions>>(solns => solns.Contains(soln))))
-        .Returns(soln.Status == SolutionStatus.Approved ? new[] { soln } : Enumerable.Empty<Solutions>());
+        .Returns(returnSoln ? new[] { soln } : Enumerable.Empty<Solutions>());
       var techConts = new[]
       {
         Creator.GetTechnicalContact(solutionId: soln.Id),
         Creator.GetTechnicalContact(solutionId: soln.Id),
         Creator.GetTechnicalContact(solutionId: soln.Id)
       };
-      var expTechConts = techConts.Where(x => soln.Status == SolutionStatus.Approved);
+      var expTechConts = techConts.Where(x => returnSoln);
 
       var res = filter.Filter(techConts);
 
       res.Should().BeEquivalentTo(expTechConts);
+    }
+
+    [Test]
+    public void Filter_None_Calls_SolutionFilter(
+      [Values(true, false)]bool returnSoln)
+    {
+      var filter = Create();
+      var soln = Creator.GetSolution();
+      _solutionDatastore.Setup(x => x.ById(soln.Id)).Returns(soln);
+      _solutionsFilter
+        .Setup(x => x.Filter(It.Is<IEnumerable<Solutions>>(solns => solns.Contains(soln))))
+        .Returns(returnSoln ? new[] { soln } : Enumerable.Empty<Solutions>());
+      var techConts = new[]
+      {
+        Creator.GetTechnicalContact(solutionId: soln.Id),
+        Creator.GetTechnicalContact(solutionId: soln.Id),
+        Creator.GetTechnicalContact(solutionId: soln.Id)
+      };
+
+      // use ToList() to force LINQ to run
+      filter.Filter(techConts).ToList();
+
+      _solutionsFilter.Verify(x => x.Filter(It.Is<IEnumerable<Solutions>>(solns => solns.Contains(soln))), Times.Exactly(techConts.Count()));
     }
 
     private TechnicalContactsFilter Create()

@@ -30,20 +30,49 @@ namespace NHSD.GPITF.BuyingCatalog.Logic.Tests
     }
 
     [Test]
-    public void Filter_None_Returns_Approved(
-      [ValueSource(typeof(Creator), nameof(Creator.SolutionStatuses))]SolutionStatus status)
+    public void Filter_None_Returns_Filtered_By_SolutionFilter(
+      [Values(true, false)]bool returnSoln)
     {
       var filter = Create();
-      var soln = Creator.GetSolution(status: status);
+      var soln = Creator.GetSolution();
       _solutionDatastore.Setup(x => x.ById(soln.Id)).Returns(soln);
-      var claim = Creator.GetClaimsBase(solnId: soln.Id);
       _solutionsFilter
         .Setup(x => x.Filter(It.Is<IEnumerable<Solutions>>(solns => solns.Contains(soln))))
-        .Returns(soln.Status == SolutionStatus.Approved ? new[] { soln } : Enumerable.Empty<Solutions>());
+        .Returns(returnSoln ? new[] { soln } : Enumerable.Empty<Solutions>());
+      var claims = new[]
+      {
+        Creator.GetClaimsBase(solnId: soln.Id),
+        Creator.GetClaimsBase(solnId: soln.Id),
+        Creator.GetClaimsBase(solnId: soln.Id)
+      };
+      var expClaims = claims.Where(x => returnSoln);
 
-      var res = filter.Filter(claim);
+      var res = filter.Filter(claims);
 
-      res.Should().Be(soln.Status == SolutionStatus.Approved ? claim : null);
+      res.Should().BeEquivalentTo(returnSoln ? claims : expClaims);
+    }
+
+    [Test]
+    public void Filter_None_Calls_SolutionFilter(
+      [Values(true, false)]bool returnSoln)
+    {
+      var filter = Create();
+      var soln = Creator.GetSolution();
+      _solutionDatastore.Setup(x => x.ById(soln.Id)).Returns(soln);
+      _solutionsFilter
+        .Setup(x => x.Filter(It.Is<IEnumerable<Solutions>>(solns => solns.Contains(soln))))
+        .Returns(returnSoln ? new[] { soln } : Enumerable.Empty<Solutions>());
+      var claims = new[]
+      {
+        Creator.GetClaimsBase(solnId: soln.Id),
+        Creator.GetClaimsBase(solnId: soln.Id),
+        Creator.GetClaimsBase(solnId: soln.Id)
+      };
+
+      // use ToList() to force LINQ to run
+      filter.Filter(claims).ToList();
+
+      _solutionsFilter.Verify(x => x.Filter(It.Is<IEnumerable<Solutions>>(solns => solns.Contains(soln))), Times.Exactly(claims.Count()));
     }
 
     private DummyClaimsFilterBase Create()
