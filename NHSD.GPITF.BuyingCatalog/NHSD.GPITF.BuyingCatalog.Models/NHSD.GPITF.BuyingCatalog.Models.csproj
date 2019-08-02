@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
@@ -27,7 +27,7 @@
   <ItemGroup>
     <PackageReference Include="Dapper" Version="1.50.4" />
     <PackageReference Include="Dapper.Contrib" Version="1.50.4" />
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.8" AllowExplicitVersion="true" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.9" AllowExplicitVersion="true" />
     <PackageReference Include="Polly-Signed" Version="5.8.0" />
   </ItemGroup>
 
