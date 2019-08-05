@@ -12,6 +12,7 @@ namespace NHSD.GPITF.BuyingCatalog.Models
   {
     private const int DefaultPageIndex = 1;
     private const int DefaultPageSize = 20;
+    private const int MaximumPageSize = 100;
 
     /// <summary>
     /// 1-based index of which page this page
@@ -75,11 +76,11 @@ namespace NHSD.GPITF.BuyingCatalog.Models
 
     public static PaginatedList<T> Create(IEnumerable<T> source, int? pageIndex, int? pageSize)
     {
-      pageIndex = pageIndex ?? DefaultPageIndex;
-      pageSize = pageSize ?? DefaultPageSize;
+      int pageIndexValue = pageIndex ?? DefaultPageIndex;
+      int pageSizeValue = pageSize ?? DefaultPageSize;
 
-      var normPageIndex = (int)(pageIndex > 0 ? pageIndex - 1 : 0);
-      var normPageSize = (int)(pageSize > 0 ? pageSize : 0);
+      var normPageIndex = pageIndexValue > 0 ? pageIndexValue - 1 : 0;
+      var normPageSize = pageSizeValue > 0 ? Math.Min(pageSizeValue, MaximumPageSize) : DefaultPageSize;
       var items = source
                     .Skip(normPageIndex * normPageSize)
                     .Take(normPageSize)
