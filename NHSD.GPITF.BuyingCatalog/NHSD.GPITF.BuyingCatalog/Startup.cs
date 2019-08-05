@@ -62,12 +62,6 @@ namespace NHSD.GPITF.BuyingCatalog
         .AddMvc()
         .AddControllersAsServices();
 
-      services.Configure<FormOptions>(x =>
-      {
-        x.ValueLengthLimit = int.MaxValue;
-        x.MultipartBodyLengthLimit = int.MaxValue; // In case of multipart
-      });
-
       if (CurrentEnvironment.IsDevelopment())
       {
         // Register the Swagger generator, defining one or more Swagger documents
