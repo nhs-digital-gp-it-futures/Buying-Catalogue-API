@@ -62,6 +62,13 @@ namespace NHSD.GPITF.BuyingCatalog
         .AddMvc()
         .AddControllersAsServices();
 
+      services.AddApiVersioning(options =>
+      {
+        options.ReportApiVersions = true;
+        options.AssumeDefaultVersionWhenUnspecified = true;
+        options.DefaultApiVersion = new ApiVersion(1, 0);
+      });
+
       if (CurrentEnvironment.IsDevelopment())
       {
         // Register the Swagger generator, defining one or more Swagger documents

@@ -15,7 +15,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
   /// Manage standards
   /// </summary>
   [ApiVersion("1")]
-  [Route("api/[controller]")]
+  [Route("api/v{version:apiVersion}/[controller]")]
   [AllowAnonymous]
   [Produces("application/json")]
   public sealed class StandardsController : Controller

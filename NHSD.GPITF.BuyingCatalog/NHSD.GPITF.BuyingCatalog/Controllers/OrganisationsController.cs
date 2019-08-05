@@ -14,7 +14,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
   /// Find and retrieve organisations
   /// </summary>
   [ApiVersion("1")]
-  [Route("api/[controller]")]
+  [Route("api/v{version:apiVersion}/[controller]")]
   [AllowAnonymous]
   [Produces("application/json")]
   public sealed class OrganisationsController : Controller

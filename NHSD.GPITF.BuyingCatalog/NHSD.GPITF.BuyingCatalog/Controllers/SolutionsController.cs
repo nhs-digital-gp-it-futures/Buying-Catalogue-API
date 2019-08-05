@@ -14,7 +14,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
   /// Create, find and retrieve solutions
   /// </summary>
   [ApiVersion("1")]
-  [Route("api/[controller]")]
+  [Route("api/v{version:apiVersion}/[controller]")]
   [AllowAnonymous]
   [Produces("application/json")]
   public sealed class SolutionsController : Controller

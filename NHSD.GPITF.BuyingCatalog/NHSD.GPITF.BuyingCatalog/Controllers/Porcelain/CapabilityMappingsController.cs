@@ -13,7 +13,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers.Porcelain
   /// </summary>
   [ApiVersion("1")]
   [ApiTag("porcelain")]
-  [Route("api/porcelain/[controller]")]
+  [Route("api/v{version:apiVersion}/porcelain/[controller]")]
   [AllowAnonymous]
   [Produces("application/json")]
   public sealed class CapabilityMappingsController : Controller
