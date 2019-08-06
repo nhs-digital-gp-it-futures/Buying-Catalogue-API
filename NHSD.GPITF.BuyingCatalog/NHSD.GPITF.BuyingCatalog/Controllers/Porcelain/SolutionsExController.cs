@@ -39,8 +39,8 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers.Porcelain
     [HttpGet]
     [Route("BySolution/{solutionId}")]
     [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(SolutionEx), description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Solution not found in CRM")]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(SolutionEx))]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound)]
     public IActionResult BySolution([FromRoute][Required]string solutionId)
     {
       var solnEx = _logic.BySolution(solutionId);
@@ -56,7 +56,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers.Porcelain
     [HttpGet]
     [Route("ByOrganisation/{organisationId}")]
     [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(IEnumerable<SolutionEx>), description: "Success")]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(IEnumerable<SolutionEx>))]
     public IActionResult ByOrganisation([FromRoute][Required]string organisationId)
     {
       var solnExs = _logic.ByOrganisation(organisationId);

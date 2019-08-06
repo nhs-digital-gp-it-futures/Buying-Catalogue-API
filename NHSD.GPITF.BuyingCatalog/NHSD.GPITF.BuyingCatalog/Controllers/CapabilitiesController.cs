@@ -42,8 +42,8 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [HttpGet]
     [Route("ByFramework/{frameworkId}")]
     [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<Capabilities>), description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Framework not found in CRM")]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<Capabilities>))]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound)]
     public IActionResult ByFramework([FromRoute][Required]string frameworkId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
       var caps = _logic.ByFramework(frameworkId);
@@ -62,8 +62,8 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [HttpGet]
     [Route("ById/{id}")]
     [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(Capabilities), description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "No capabilities not found in CRM")]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(Capabilities))]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound)]
     public IActionResult ById([FromRoute][Required]string id)
     {
       var cap = _logic.ById(id);
@@ -79,8 +79,8 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [HttpPost]
     [Route("ByIds")]
     [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(IEnumerable<Capabilities>), description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Capabilities not found in CRM")]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(IEnumerable<Capabilities>))]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound)]
     public IActionResult ByIds([FromBody][Required]IEnumerable<string> ids)
     {
       var caps = _logic.ByIds(ids);
@@ -100,8 +100,8 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [HttpGet]
     [Route("ByStandard/{standardId}")]
     [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<Capabilities>), description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Capability not found in CRM")]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<Capabilities>))]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound)]
     public IActionResult ByStandard([FromRoute][Required]string standardId, [FromQuery][Required]bool isOptional, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
       var caps = _logic.ByStandard(standardId, isOptional);
@@ -118,7 +118,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     /// <response code="200">Success - if no capabilities found, return empty list</response>
     [HttpGet]
     [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<Capabilities>), description: "Success - if no capabilities found, return empty list")]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<Capabilities>))]
     public IActionResult Get([FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
       var allCaps = _logic.GetAll();

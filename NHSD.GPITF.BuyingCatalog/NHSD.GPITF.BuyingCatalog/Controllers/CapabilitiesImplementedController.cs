@@ -39,8 +39,8 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [HttpGet]
     [Route("{id}")]
     [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(CapabilitiesImplemented), description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Claim not found in CRM")]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(CapabilitiesImplemented))]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound)]
     public IActionResult ById([FromRoute][Required]string id)
     {
       var claim = _logic.ById(id);
@@ -59,8 +59,8 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [HttpGet]
     [Route("BySolution/{solutionId}")]
     [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<CapabilitiesImplemented>), description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Solution not found in CRM")]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<CapabilitiesImplemented>))]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound)]
     public IActionResult BySolution([FromRoute][Required]string solutionId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
       var caps = _logic.BySolution(solutionId);

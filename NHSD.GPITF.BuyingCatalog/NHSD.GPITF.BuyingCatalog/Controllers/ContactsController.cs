@@ -42,8 +42,8 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [HttpGet]
     [Route("ByOrganisation/{organisationId}")]
     [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<Contacts>), description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Organisation not found in ODS")]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<Contacts>))]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound)]
     public IActionResult ByOrganisation([FromRoute][Required]string organisationId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
       var contacts = _logic.ByOrganisation(organisationId);
@@ -62,8 +62,8 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [HttpGet]
     [Route("ByEmail/{email}")]
     [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(Contacts), description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Contact not found")]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(Contacts))]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound)]
     public IActionResult ByEmail([FromRoute][Required]string email)
     {
       var convertedEmail = HttpUtility.UrlDecode(email);
@@ -80,8 +80,8 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [HttpGet]
     [Route("ById/{id}")]
     [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(Contacts), description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Contact not found")]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(Contacts))]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound)]
     public IActionResult ById([FromRoute][Required]string id)
     {
       var contact = _logic.ById(id);

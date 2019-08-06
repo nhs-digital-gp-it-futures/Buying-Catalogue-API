@@ -35,7 +35,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers.Porcelain
     /// <response code="200">Success</response>
     [HttpGet]
     [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(CapabilityMappings), description: "Success")]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(CapabilityMappings))]
     public IActionResult Get()
     {
       var capMaps = _logic.GetAll();

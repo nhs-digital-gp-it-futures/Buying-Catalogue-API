@@ -41,8 +41,8 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [HttpGet]
     [Route("ByCapability/{capabilityId}")]
     [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<Frameworks>), description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Capability not found in CRM")]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<Frameworks>))]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound)]
     public IActionResult ByCapability([FromRoute][Required]string capabilityId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
       var frameworks = _logic.ByCapability(capabilityId);
@@ -62,8 +62,8 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [HttpGet]
     [Route("ByStandard/{standardId}")]
     [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<Frameworks>), description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Standard not found in CRM")]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<Frameworks>))]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound)]
     public IActionResult ByStandard([FromRoute][Required]string standardId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
       var frameworks = _logic.ByStandard(standardId);
@@ -82,8 +82,8 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [HttpGet]
     [Route("ById/{id}")]
     [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(Frameworks), description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Framework not found in CRM")]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(Frameworks))]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound)]
     public IActionResult ById([FromRoute][Required]string id)
     {
       var framework = _logic.ById(id);
@@ -101,8 +101,8 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [HttpGet]
     [Route("BySolution/{solutionId}")]
     [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<Frameworks>), description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Solution not found in CRM")]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<Frameworks>))]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound)]
     public IActionResult BySolution([FromRoute][Required]string solutionId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
       var frameworks = _logic.BySolution(solutionId);
@@ -119,7 +119,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     /// <response code="200">Success - if no frameworks found, return empty list</response>
     [HttpGet]
     [ValidateModelState]
-    [SwaggerResponse(statusCode: 200, type: typeof(PaginatedList<Frameworks>), description: "Success - if no frameworks found, return empty list")]
+    [SwaggerResponse(statusCode: 200, type: typeof(PaginatedList<Frameworks>))]
     public IActionResult Get([FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
       var allFrameworks = _logic.GetAll();

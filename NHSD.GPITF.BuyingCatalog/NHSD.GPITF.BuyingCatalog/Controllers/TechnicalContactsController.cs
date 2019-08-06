@@ -36,14 +36,14 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     /// </summary>
     /// <param name="solutionId">CRM identifier of solution</param>
     /// <param name="pageIndex">1-based index of page to return.  Defaults to 1</param>
-    /// <param name="pageSize">number of items per page.  Defaults to 20</param>
+    /// <param name="pageSize">number of items per page.  Defaults to 20</param>  
     /// <response code="200">Success</response>
     /// <response code="404">Solution not found in CRM</response>
     [HttpGet]
     [Route("BySolution/{solutionId}")]
     [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<TechnicalContacts>), description: "Success")]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound, description: "Solution not found in CRM")]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<TechnicalContacts>))]
+    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound)]
     public IActionResult BySolution([FromRoute][Required]string solutionId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
       var techConts = _logic.BySolution(solutionId);
