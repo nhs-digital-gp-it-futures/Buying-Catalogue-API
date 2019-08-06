@@ -86,7 +86,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Importer
     {
       var config = new ConfigurationBuilder()
         .AddJsonFile("hosting.json")
+        .AddUserSecrets<Program>()
         .Build();
+
       var dbConnFact = new DbConnectionFactory(config);
       using (var conn = dbConnFact.Get())
       {

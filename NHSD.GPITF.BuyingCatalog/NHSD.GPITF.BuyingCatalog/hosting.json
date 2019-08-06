@@ -1,24 +1,3 @@
 ﻿{
-  "urls": "http://*:5100",
 
-  "wwwroot": "wwwroot",
-
-  "UseCRM": false,
-
-  "GIF":
-  {
-    "Authority_Uri": "http://crm:5001"
-  },
-
-  "Log":
-  {
-    "CRM": true,
-    "SharePoint": true,
-    "BearerAuth": true
-  },
-
-  "Cache":
-  {
-    "Host": "localhost"
-  }
 }
