@@ -1,5 +1,4 @@
-﻿using Dapper.Contrib.Extensions;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using NHSD.GPITF.BuyingCatalog.Datastore.Database.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Interfaces.Porcelain;
@@ -13,10 +12,9 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
   {
     private readonly ISolutionsDatastore _solutionDatastore;
     private readonly ITechnicalContactsDatastore _technicalContactDatastore;
-
     private readonly ICapabilitiesImplementedDatastore _claimedCapabilityDatastore;
-
     private readonly IStandardsApplicableDatastore _claimedStandardDatastore;
+    private readonly IOrganisationsDatastore _organisationsDatastore;
 
     public SolutionsExDatastore(
       IDbConnectionFactory dbConnectionFactory,
@@ -24,31 +22,32 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
       ISyncPolicyFactory policy,
       ISolutionsDatastore solutionDatastore,
       ITechnicalContactsDatastore technicalContactDatastore,
-
       ICapabilitiesImplementedDatastore claimedCapabilityDatastore,
-
-      IStandardsApplicableDatastore claimedStandardDatastore
+      IStandardsApplicableDatastore claimedStandardDatastore,
+      IOrganisationsDatastore organisationsDatastore
       ) :
       base(dbConnectionFactory, logger, policy)
     {
       _solutionDatastore = solutionDatastore;
       _technicalContactDatastore = technicalContactDatastore;
-
       _claimedCapabilityDatastore = claimedCapabilityDatastore;
-
       _claimedStandardDatastore = claimedStandardDatastore;
+      _organisationsDatastore = organisationsDatastore;
     }
 
     public SolutionEx BySolution(string solutionId)
     {
       return GetInternal(() =>
       {
+        Models.Solutions solution = _solutionDatastore.ById(solutionId);
+        
         var retval = new SolutionEx
         {
-          Solution = _solutionDatastore.ById(solutionId),
+          Solution = solution,
           TechnicalContact = _technicalContactDatastore.BySolution(solutionId).ToList(),
           ClaimedCapability = _claimedCapabilityDatastore.BySolution(solutionId).ToList(),
-          ClaimedStandard = _claimedStandardDatastore.BySolution(solutionId).ToList()
+          ClaimedStandard = _claimedStandardDatastore.BySolution(solutionId).ToList(),
+          Organisation = _organisationsDatastore.ById(solution?.OrganisationId)
         };
 
         return retval;
