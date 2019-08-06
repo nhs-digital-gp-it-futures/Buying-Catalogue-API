@@ -4,7 +4,6 @@ using Newtonsoft.Json;
 using NHSD.GPITF.BuyingCatalog.Attributes;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
-using Swashbuckle.AspNetCore.SwaggerGen;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 
@@ -42,8 +41,8 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [HttpGet]
     [Route("ByFramework/{frameworkId}")]
     [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<Solutions>))]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound)]
+    [ProducesResponseType(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<Solutions>))]
+    [ProducesResponseType(statusCode: (int)HttpStatusCode.NotFound)]
     public IActionResult ByFramework([FromRoute][Required]string frameworkId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
       var solutions = _logic.ByFramework(frameworkId);
@@ -62,8 +61,8 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [HttpGet]
     [Route("ById/{id}")]
     [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(Solutions))]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound)]
+    [ProducesResponseType(statusCode: (int)HttpStatusCode.OK, type: typeof(Solutions))]
+    [ProducesResponseType(statusCode: (int)HttpStatusCode.NotFound)]
     public IActionResult ById([FromRoute][Required]string id)
     {
       var solution = _logic.ById(id);
@@ -81,8 +80,8 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [HttpGet]
     [Route("ByOrganisation/{organisationId}")]
     [ValidateModelState]
-    [SwaggerResponse(statusCode: 200, type: typeof(PaginatedList<Solutions>))]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<Solutions>))]
+    [ProducesResponseType(statusCode: 200, type: typeof(PaginatedList<Solutions>))]
+    [ProducesResponseType(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<Solutions>))]
     public IActionResult ByOrganisation([FromRoute][Required]string organisationId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
       var solutions = _logic.ByOrganisation(organisationId);

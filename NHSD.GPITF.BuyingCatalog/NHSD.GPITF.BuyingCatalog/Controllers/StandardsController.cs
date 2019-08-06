@@ -4,7 +4,6 @@ using Newtonsoft.Json;
 using NHSD.GPITF.BuyingCatalog.Attributes;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
-using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
@@ -43,8 +42,8 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [HttpGet]
     [Route("ByCapability/{capabilityId}")]
     [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<Standards>))]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound)]
+    [ProducesResponseType(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<Standards>))]
+    [ProducesResponseType(statusCode: (int)HttpStatusCode.NotFound)]
     public IActionResult ByCapability([FromRoute][Required]string capabilityId, [FromQuery][Required]bool isOptional, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
       var stds = _logic.ByCapability(capabilityId, isOptional);
@@ -64,8 +63,8 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [HttpGet]
     [Route("ByFramework/{frameworkId}")]
     [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<Standards>))]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound)]
+    [ProducesResponseType(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<Standards>))]
+    [ProducesResponseType(statusCode: (int)HttpStatusCode.NotFound)]
     public IActionResult ByFramework([FromRoute][Required]string frameworkId, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
       var stds = _logic.ByFramework(frameworkId);
@@ -84,8 +83,8 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [HttpGet]
     [Route("ById/{id}")]
     [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(Standards))]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound)]
+    [ProducesResponseType(statusCode: (int)HttpStatusCode.OK, type: typeof(Standards))]
+    [ProducesResponseType(statusCode: (int)HttpStatusCode.NotFound)]
     public IActionResult ById([FromRoute][Required]string id)
     {
       var std = _logic.ById(id);
@@ -101,8 +100,8 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [HttpPost]
     [Route("ByIds")]
     [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(IEnumerable<Standards>))]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound)]
+    [ProducesResponseType(statusCode: (int)HttpStatusCode.OK, type: typeof(IEnumerable<Standards>))]
+    [ProducesResponseType(statusCode: (int)HttpStatusCode.NotFound)]
     public IActionResult ByIds([FromBody][Required]IEnumerable<string> ids)
     {
       var stds = _logic.ByIds(ids);
@@ -118,7 +117,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     /// <response code="200">Success - if no standards found, return empty list</response>
     [HttpGet]
     [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<Standards>))]
+    [ProducesResponseType(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<Standards>))]
     public IActionResult Get([FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
       var allStds = _logic.GetAll();

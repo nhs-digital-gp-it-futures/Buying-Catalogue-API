@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using NHSD.GPITF.BuyingCatalog.Attributes;
 using NHSD.GPITF.BuyingCatalog.Interfaces.Porcelain;
 using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
-using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Net;
 
 namespace NHSD.GPITF.BuyingCatalog.Controllers.Porcelain
@@ -35,7 +34,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers.Porcelain
     /// <response code="200">Success</response>
     [HttpGet]
     [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(CapabilityMappings))]
+    [ProducesResponseType(statusCode: (int)HttpStatusCode.OK, type: typeof(CapabilityMappings))]
     public IActionResult Get()
     {
       var capMaps = _logic.GetAll();

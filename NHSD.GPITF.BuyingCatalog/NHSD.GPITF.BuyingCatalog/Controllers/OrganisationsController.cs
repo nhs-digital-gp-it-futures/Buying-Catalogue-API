@@ -4,7 +4,6 @@ using Newtonsoft.Json;
 using NHSD.GPITF.BuyingCatalog.Attributes;
 using NHSD.GPITF.BuyingCatalog.Interfaces;
 using NHSD.GPITF.BuyingCatalog.Models;
-using Swashbuckle.AspNetCore.SwaggerGen;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 
@@ -39,8 +38,8 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers
     [HttpGet]
     [Route("ByContact/{contactId}")]
     [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(Organisations))]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound)]
+    [ProducesResponseType(statusCode: (int)HttpStatusCode.OK, type: typeof(Organisations))]
+    [ProducesResponseType(statusCode: (int)HttpStatusCode.NotFound)]
     public IActionResult ByContact([FromRoute][Required]string contactId)
     {
       var org = _logic.ByContact(contactId);

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using NHSD.GPITF.BuyingCatalog.Attributes;
 using NHSD.GPITF.BuyingCatalog.Interfaces.Porcelain;
 using NHSD.GPITF.BuyingCatalog.Models.Porcelain;
-using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
@@ -39,8 +38,8 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers.Porcelain
     [HttpGet]
     [Route("BySolution/{solutionId}")]
     [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(SolutionEx))]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.NotFound)]
+    [ProducesResponseType(statusCode: (int)HttpStatusCode.OK, type: typeof(SolutionEx))]
+    [ProducesResponseType(statusCode: (int)HttpStatusCode.NotFound)]
     public IActionResult BySolution([FromRoute][Required]string solutionId)
     {
       var solnEx = _logic.BySolution(solutionId);
@@ -56,7 +55,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers.Porcelain
     [HttpGet]
     [Route("ByOrganisation/{organisationId}")]
     [ValidateModelState]
-    [SwaggerResponse(statusCode: (int)HttpStatusCode.OK, type: typeof(IEnumerable<SolutionEx>))]
+    [ProducesResponseType(statusCode: (int)HttpStatusCode.OK, type: typeof(IEnumerable<SolutionEx>))]
     public IActionResult ByOrganisation([FromRoute][Required]string organisationId)
     {
       var solnExs = _logic.ByOrganisation(organisationId);
