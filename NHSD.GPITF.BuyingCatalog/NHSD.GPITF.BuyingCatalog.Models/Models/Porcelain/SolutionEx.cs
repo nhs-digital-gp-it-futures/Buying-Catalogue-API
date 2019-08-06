@@ -28,7 +28,7 @@ namespace NHSD.GPITF.BuyingCatalog.Models.Porcelain
     public List<TechnicalContacts> TechnicalContact { get; set; } = new List<TechnicalContacts>();
 
     /// <summary>
-    /// An assoicated <see cref="Organisations"/>.
+    /// An associated <see cref="Organisations"/>.
     /// </summary>
     public Organisations Organisation { get; set; }
   }
