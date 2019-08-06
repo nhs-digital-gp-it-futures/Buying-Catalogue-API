@@ -39,15 +39,13 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
     {
       return GetInternal(() =>
       {
-        Models.Solutions solution = _solutionDatastore.ById(solutionId);
-        
         var retval = new SolutionEx
         {
-          Solution = solution,
+          Solution = _solutionDatastore.ById(solutionId),
           TechnicalContact = _technicalContactDatastore.BySolution(solutionId).ToList(),
           ClaimedCapability = _claimedCapabilityDatastore.BySolution(solutionId).ToList(),
           ClaimedStandard = _claimedStandardDatastore.BySolution(solutionId).ToList(),
-          Organisation = _organisationsDatastore.ById(solution?.OrganisationId)
+          Organisation = _organisationsDatastore.ById(_solutionDatastore.ById(solutionId)?.OrganisationId)
         };
 
         return retval;
