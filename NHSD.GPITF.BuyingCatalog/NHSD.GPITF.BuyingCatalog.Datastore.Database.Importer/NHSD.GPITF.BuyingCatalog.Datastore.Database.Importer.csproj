@@ -28,12 +28,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\NHSD.GPITF.BuyingCatalog\hosting.json" Link="hosting.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="csvhelper" Version="7.1.0" />
     <PackageReference Include="Dapper" Version="1.50.4" />
     <PackageReference Include="Dapper.Contrib" Version="1.50.4" />
