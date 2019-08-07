@@ -65,7 +65,7 @@ namespace NHSD.GPITF.BuyingCatalog
       {
         options.ReportApiVersions = true;
         options.AssumeDefaultVersionWhenUnspecified = true;
-        options.DefaultApiVersion = new ApiVersion(1, 0);
+        options.DefaultApiVersion = DefaultValues.ApiVersion;
       });
 
       if (CurrentEnvironment.IsDevelopment())
@@ -73,6 +73,9 @@ namespace NHSD.GPITF.BuyingCatalog
         // Register the Swagger generator, defining one or more Swagger documents
         services.AddSwaggerGen(options =>
         {
+          // add a custom operation filter which sets default values
+          options.OperationFilter<SwaggerDefaultValues>();
+
           options.SwaggerDoc("v1",
             new Info
             {
