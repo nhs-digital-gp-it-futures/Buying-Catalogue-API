@@ -33,7 +33,7 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers.Porcelain
     }
 
     /// <summary>
-    /// Get existing solution/s which support *all* of the specified capabilities
+    /// Get existing solution/s which support at least *all* of the specified capabilities
     /// </summary>
     /// <param name="capIds">list of capability ids</param>
     /// <param name="pageIndex">1-based index of page to return.  Defaults to 1</param>
