@@ -12,15 +12,27 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
 {
   public sealed class SearchDatastore : DatastoreBase<Solutions>, ISearchDatastore
   {
+    private readonly IFrameworksDatastore _frameworkDatastore;
+    private readonly ISolutionsDatastore _solutionDatastore;
+    private readonly ICapabilitiesDatastore _capabilityDatastore;
+    private readonly ICapabilitiesImplementedDatastore _claimedCapabilityDatastore;
     private readonly ISolutionsExDatastore _solutionsExDatastore;
 
     public SearchDatastore(
       IDbConnectionFactory dbConnectionFactory, 
       ILogger<SearchDatastore> logger, 
       ISyncPolicyFactory policy,
+      IFrameworksDatastore frameworkDatastore,
+      ISolutionsDatastore solutionDatastore,
+      ICapabilitiesDatastore capabilityDatastore,
+      ICapabilitiesImplementedDatastore claimedCapabilityDatastore,
       ISolutionsExDatastore solutionsExDatastore) :
       base(dbConnectionFactory, logger, policy)
     {
+      _frameworkDatastore = frameworkDatastore;
+      _solutionDatastore = solutionDatastore;
+      _capabilityDatastore = capabilityDatastore;
+      _claimedCapabilityDatastore = claimedCapabilityDatastore;
       _solutionsExDatastore = solutionsExDatastore;
     }
 
@@ -33,17 +45,23 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
 
       return GetInternal(() =>
       {
-        var sql =
-$@"
-SELECT soln.Id FROM Solutions soln
-join CapabilitiesImplemented ci on ci.SolutionId = soln.Id
-join Capabilities cap on cap.Id = ci.CapabilityId
-where cap.Id in ({capsSet})
-group by soln.Id
-having count(soln.Id) = {capIds.Count()}
-";
-        var solnIds = _dbConnection.Query<string>(sql);
-        var retval = solnIds.Select(solnId => _solutionsExDatastore.BySolution(solnId));
+        // get all Frameworks
+        var allFrameworks = _frameworkDatastore.GetAll();
+
+        // get all Solutions via frameworks
+        var allSolns = allFrameworks
+          .SelectMany(fw => _solutionDatastore.ByFramework(fw.Id));
+
+        // get all unique Solutions with at least all specified Capability
+        var allSolnsCapsIds = allSolns
+          .Where(soln => _claimedCapabilityDatastore
+            .BySolution(soln.Id)
+            .Select(cc => cc.CapabilityId)
+            .Intersect(capIds)
+            .Count() >= capIds.Count())
+          .Select(soln => soln.Id);
+
+        var retval = allSolnsCapsIds.Select(solnId => _solutionsExDatastore.BySolution(solnId));
 
         return retval;
       });
