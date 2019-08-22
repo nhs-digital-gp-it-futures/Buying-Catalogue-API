@@ -12,6 +12,7 @@ using NUnit.Framework;
 using Polly;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Tests.Porcelain
 {
@@ -48,8 +49,8 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Tests.Porcelain
       Assert.DoesNotThrow(() => Create());
     }
 
-    [TestCase("CapId_01")]
-    public void ByCapabilities_SolutionHasCapability_ReturnsSolution(string capabilityId)
+    [Test]
+    public void ByCapabilities_SolutionHasCapability_ReturnsSolution()
     {
       var framework = Creator.GetFramework();
       _frameworkDatastore.Setup(x => x.GetAll()).Returns(new[] { framework });
@@ -57,7 +58,7 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Tests.Porcelain
       var soln = Creator.GetSolution();
       _solutionDatastore.Setup(x => x.ByFramework(framework.Id)).Returns(new[] { soln });
 
-      var capability = Creator.GetCapability(id: capabilityId);
+      var capability = Creator.GetCapability(id: "CapId_01");
       var claimedCapability = Creator.GetCapabilitiesImplemented(solnId: soln.Id, claimId: capability.Id);
       _claimedCapabilityDatastore.Setup(x => x.BySolution(soln.Id)).Returns(new[] { claimedCapability });
 
@@ -71,10 +72,67 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Tests.Porcelain
 
       var search = Create();
 
-      search.ByCapabilities(new[] { capabilityId });
+      search.ByCapabilities(new[] { capability.Id });
 
       var res = results.Should().ContainSingle();
       res.Which.Should().BeEquivalentTo(solnEx);
+    }
+
+    [Test]
+    public void ByCapabilities_SolutionHasMoreCapability_ReturnsSolution()
+    {
+      var framework = Creator.GetFramework();
+      _frameworkDatastore.Setup(x => x.GetAll()).Returns(new[] { framework });
+
+      var soln = Creator.GetSolution();
+      _solutionDatastore.Setup(x => x.ByFramework(framework.Id)).Returns(new[] { soln });
+
+      var capability = Creator.GetCapability(id: "CapId_01");
+      var claimedCapability = Creator.GetCapabilitiesImplemented(solnId: soln.Id, claimId: capability.Id);
+      var capability2 = Creator.GetCapability();
+      var claimedCapability2 = Creator.GetCapabilitiesImplemented(solnId: soln.Id, claimId: capability2.Id);
+      _claimedCapabilityDatastore.Setup(x => x.BySolution(soln.Id)).Returns(new[] { claimedCapability, claimedCapability2 });
+
+      var solnEx = Creator.GetSolutionEx(soln: soln);
+      _solutionsExDatastore.Setup(x => x.BySolution(soln.Id)).Returns(solnEx);
+
+      IEnumerable<SolutionEx> results = null;
+      _policy.Setup(x => x.Execute(It.IsAny<Func<IEnumerable<SolutionEx>>>()))
+        .Callback((Func<IEnumerable<SolutionEx>> action) => results = action())
+        .Returns(results);
+
+      var search = Create();
+
+      search.ByCapabilities(new[] { capability.Id });
+
+      var res = results.Should().ContainSingle();
+      res.Which.Should().BeEquivalentTo(solnEx);
+    }
+
+    [Test]
+    public void ByCapabilities_SolutionHasNoCapability_ReturnsEmpty()
+    {
+      var framework = Creator.GetFramework();
+      _frameworkDatastore.Setup(x => x.GetAll()).Returns(new[] { framework });
+
+      var soln = Creator.GetSolution();
+      _solutionDatastore.Setup(x => x.ByFramework(framework.Id)).Returns(new[] { soln });
+
+      _claimedCapabilityDatastore.Setup(x => x.BySolution(soln.Id)).Returns(Enumerable.Empty<CapabilitiesImplemented>());
+
+      var solnEx = Creator.GetSolutionEx(soln: soln);
+      _solutionsExDatastore.Setup(x => x.BySolution(soln.Id)).Returns(solnEx);
+
+      IEnumerable<SolutionEx> results = null;
+      _policy.Setup(x => x.Execute(It.IsAny<Func<IEnumerable<SolutionEx>>>()))
+        .Callback((Func<IEnumerable<SolutionEx>> action) => results = action())
+        .Returns(results);
+
+      var search = Create();
+
+      search.ByCapabilities(new[] { "CapId_01" });
+
+      results.Should().BeEmpty();
     }
 
     private SearchDatastore Create()
