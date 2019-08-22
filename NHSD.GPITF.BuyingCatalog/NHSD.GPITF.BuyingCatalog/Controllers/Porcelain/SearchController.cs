@@ -43,11 +43,11 @@ namespace NHSD.GPITF.BuyingCatalog.Controllers.Porcelain
     [Route("ByCapabilities")]
     [ValidateModelState]
     [AllowAnonymous]
-    [ProducesResponseType(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<SearchResult>))]
+    [ProducesResponseType(statusCode: (int)HttpStatusCode.OK, type: typeof(PaginatedList<SolutionEx>))]
     public IActionResult ByCapabilities([FromBody][Required] IEnumerable<string> capIds, [FromQuery]int? pageIndex, [FromQuery]int? pageSize)
     {
       var solutions = _logic.ByCapabilities(capIds);
-      var retval = PaginatedList<SearchResult>.Create(solutions, pageIndex, pageSize);
+      var retval = PaginatedList<SolutionEx>.Create(solutions, pageIndex, pageSize);
       return new OkObjectResult(retval);
     }
   }
