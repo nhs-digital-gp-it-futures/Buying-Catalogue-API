@@ -24,7 +24,6 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Tests.Porcelain
     private Mock<ISyncPolicy> _policy;
     private Mock<IFrameworksDatastore> _frameworkDatastore;
     private Mock<ISolutionsDatastore> _solutionDatastore;
-    private Mock<ICapabilitiesDatastore> _capabilityDatastore;
     private Mock<ICapabilitiesImplementedDatastore> _claimedCapabilityDatastore;
     private Mock<ISolutionsExDatastore> _solutionsExDatastore;
 
@@ -37,7 +36,6 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Tests.Porcelain
       _policy = new Mock<ISyncPolicy>();
       _frameworkDatastore = new Mock<IFrameworksDatastore>();
       _solutionDatastore = new Mock<ISolutionsDatastore>();
-      _capabilityDatastore = new Mock<ICapabilitiesDatastore>();
       _claimedCapabilityDatastore = new Mock<ICapabilitiesImplementedDatastore>();
       _solutionsExDatastore = new Mock<ISolutionsExDatastore>();
 
@@ -87,7 +85,6 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Tests.Porcelain
       _policyFact.Object,
       _frameworkDatastore.Object,
       _solutionDatastore.Object,
-      _capabilityDatastore.Object,
       _claimedCapabilityDatastore.Object,
       _solutionsExDatastore.Object);
     }

@@ -14,7 +14,6 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
   {
     private readonly IFrameworksDatastore _frameworkDatastore;
     private readonly ISolutionsDatastore _solutionDatastore;
-    private readonly ICapabilitiesDatastore _capabilityDatastore;
     private readonly ICapabilitiesImplementedDatastore _claimedCapabilityDatastore;
     private readonly ISolutionsExDatastore _solutionsExDatastore;
 
@@ -24,14 +23,12 @@ namespace NHSD.GPITF.BuyingCatalog.Datastore.Database.Porcelain
       ISyncPolicyFactory policy,
       IFrameworksDatastore frameworkDatastore,
       ISolutionsDatastore solutionDatastore,
-      ICapabilitiesDatastore capabilityDatastore,
       ICapabilitiesImplementedDatastore claimedCapabilityDatastore,
       ISolutionsExDatastore solutionsExDatastore) :
       base(dbConnectionFactory, logger, policy)
     {
       _frameworkDatastore = frameworkDatastore;
       _solutionDatastore = solutionDatastore;
-      _capabilityDatastore = capabilityDatastore;
       _claimedCapabilityDatastore = claimedCapabilityDatastore;
       _solutionsExDatastore = solutionsExDatastore;
     }
