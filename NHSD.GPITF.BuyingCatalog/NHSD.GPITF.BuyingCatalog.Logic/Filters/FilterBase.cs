@@ -25,7 +25,9 @@ namespace NHSD.GPITF.BuyingCatalog.Logic
 
     public IEnumerable<T> Filter(IEnumerable<T> input)
     {
-      return input.Select(x => FilterInternal(x)).Where(x => x != null);
+      return input
+        .Select(x => FilterInternal(x))
+        .Where(x => x != null);
     }
   }
 }
